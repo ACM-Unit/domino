@@ -18,7 +18,7 @@ public class HelloWorld
         server.setConnectors(new Connector[]{connector});
         WebAppContext webAppContext = new WebAppContext();
         webAppContext.setContextPath("/");
-        webAppContext.setResourceBase(Thread.currentThread().getContextClassLoader().getResource("webapp").toExternalForm());
+        webAppContext.setResourceBase(Thread.currentThread().getContextClassLoader().getResource("").toExternalForm());
 
         ContextHandlerCollection contextHandlerCollection = new ContextHandlerCollection();
         contextHandlerCollection.addHandler(webAppContext);

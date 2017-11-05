@@ -64,10 +64,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
-            <scope>provided</scope>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.29</version>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -91,8 +90,14 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jetty.version}</version>
                 <configuration>
+
+                    <httpConnector>
+                        <!--host>localhost</host-->
+                        <port>8081</port>
+                    </httpConnector>
+
                     <webApp>
-                        <contextPath>/test</contextPath>
+                        <contextPath>/</contextPath>
                     </webApp>
                 </configuration>
             </plugin>
@@ -109,8 +114,7 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.2.0</version>
                 <configuration>
-                    <warSourceDirectory>src/main/resources/webapp</warSourceDirectory>
-                    <warName>web-app</warName>
+                    <warSourceDirectory>src/main/webapp</warSourceDirectory>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
@@ -131,8 +135,8 @@
                 <configuration>
                     <driver>com.mysql.jdbc.Driver</driver>
                     <url>jdbc:mysql://localhost:3306</url>
-                    <username>root</username>
-                    <password>root</password>
+                    <username>${user}</username>
+                    <password>${password}</password>
                 </configuration>
 
                 <executions>
@@ -159,7 +163,7 @@
                         <configuration>
                             <autocommit>true</autocommit>
                             <srcFiles>
-                                <srcFile>src/main/resources/import.sql</srcFile>
+                                <srcFile>src/main/resources/${import}.sql</srcFile>
                             </srcFiles>
                         </configuration>
                     </execution>

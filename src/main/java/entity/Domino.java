@@ -5,7 +5,6 @@ package entity;
  */
 public class Domino {
     private int id;
-    private String name;
     private int firstNum;
     private int secondNum;
     private boolean isJoin;
@@ -47,14 +46,6 @@ public class Domino {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getFirstNum() {
         return firstNum;
     }
@@ -91,15 +82,15 @@ public class Domino {
         if (getId() != domino.getId()) return false;
         if (getFirstNum() != domino.getFirstNum()) return false;
         if (getSecondNum() != domino.getSecondNum()) return false;
-        return getName() != null ? getName().equals(domino.getName()) : domino.getName() == null;
+        return isJoin == domino.isJoin;
     }
 
     @Override
     public int hashCode() {
         int result = getId();
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
         result = 31 * result + getFirstNum();
         result = 31 * result + getSecondNum();
+        result = 31 * result + (isJoin ? 1 : 0);
         return result;
     }
 }

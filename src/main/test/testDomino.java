@@ -1,4 +1,6 @@
-import entity.Bank;
+import dao.DominoDao;
+import dao.impl.DominoDaoImpl;
+import entity.Chain;
 import entity.Domino;
 import org.junit.Test;
 
@@ -20,21 +22,28 @@ public class testDomino {
         list.add(new Domino(2, 4));
         list.add(new Domino(1, 4));
         list.add(new Domino(3, 4));
-        Bank bank = null;
+        Chain chain = null;
         try {
-            bank = new Bank(list);
+            chain = new Chain(list, "new");
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
         Set<String> set = new HashSet<String>();
-        for(List<Domino> banks: bank.getAllBanks()){
+        for(List<Domino> chains: chain.getAllChains()){
             String s = "";
-            for(Domino domino: banks){
+            for(Domino domino: chains){
                 s+=domino.getFirstNum()+":"+domino.getSecondNum()+" ; ";
             }
             set.add(s);
             System.out.println(s);
         }
         System.out.println(set.size());
+    }
+    @Test
+    public void testDomino(){
+        DominoDao dao = new DominoDaoImpl();
+        for(Domino domino: dao.getDominosByIds(new Integer[]{1,2,4,12,15})){
+            System.out.println(domino.toString());
+        }
     }
 }
