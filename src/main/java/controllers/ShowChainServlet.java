@@ -2,6 +2,7 @@ package controllers;
 
 import entity.Chain;
 import entity.Domino;
+import services.ChainService;
 import services.DominoService;
 
 import javax.servlet.ServletException;
@@ -18,8 +19,10 @@ import java.util.Set;
  */
 public class ShowChainServlet extends HttpServlet {
     private DominoService service = new DominoService();
+    private ChainService chainService = new ChainService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        request.setAttribute("names", chainService.getAllNames());
         String idString = request.getParameter("ids");
         System.out.println("ids: "+ idString);
         List<Domino> dominoes = service.getByIds(idString);
@@ -46,6 +49,7 @@ public class ShowChainServlet extends HttpServlet {
     }
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        request.setAttribute("names", chainService.getAllNames());
         String idString = request.getParameter("ids");
         System.out.println("ids: "+ idString);
         List<Domino> dominoes = service.getByIds(idString);

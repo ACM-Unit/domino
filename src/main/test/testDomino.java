@@ -42,12 +42,12 @@ public class testDomino {
     @Test
     public void testDomino() {
         DominoDao dao = new DominoDaoImpl();
-        List<Domino> listDomino = dao.getDominosByIds("1, 2, 4, 12, 15");
+        List<Domino> listDomino = dao.getDominosByIds("5, 8, 11, 15, 25");
         for (Domino domino : listDomino) {
             System.out.println(domino.toString());
         }
         try {
-            Chain chain = new Chain(listDomino, "newChain");
+            Chain chain = new Chain(listDomino, "superChain");
             ChainDao dao1 = new ChainDaoImpl();
             dao1.insertChain(chain);
         } catch (CloneNotSupportedException e) {

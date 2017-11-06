@@ -26,7 +26,8 @@ public class ChainDaoImpl implements ChainDao {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT distinct name FROM chain c");
+            stmt = connection.prepareStatement("SELECT distinct name FROM market");
+            rs = stmt.executeQuery();
             names = new ArrayList<>();
             while (rs.next()) {
                 names.add(rs.getString("name"));
@@ -53,7 +54,7 @@ public class ChainDaoImpl implements ChainDao {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT * FROM domino d, chain c where d.id = c.domino  and c.name = ?");
+            stmt = connection.prepareStatement("SELECT * FROM domino d, market m where d.id = m.domino  and m.name = ?");
             stmt.setString(1, name);
             List<Domino> list = new ArrayList<>();
             while (rs.next()) {
@@ -92,7 +93,7 @@ public class ChainDaoImpl implements ChainDao {
         Connection connection = connector.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("INSERT INTO CHAIN (name, domino)SELECT '"+chain.getName()+"', id FROM domino where id in ("+idString+")");
+            stmt = connection.prepareStatement("INSERT INTO `domino`.`market` SELECT '"+chain.getName()+"', id FROM domino where id in ("+idString+")");
             int i = stmt.executeUpdate();
             if(i == 1) {
                 return true;
@@ -126,7 +127,7 @@ public class ChainDaoImpl implements ChainDao {
         Connection connection = connector.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("DELETE FROM chain WHERE name in (" + idString+")");
+            stmt = connection.prepareStatement("DELETE FROM market WHERE name in (" + idString+")");
             int i = stmt.executeUpdate();
             if(i == 1) {
                 return true;
