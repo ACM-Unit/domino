@@ -37,19 +37,19 @@ public class Chain {
     public Chain(List<Domino> chain, String name) throws CloneNotSupportedException {
         this.chain = chain;
         this.name = name;
-        for(Domino domino: chain) {
-            Domino domino1 = domino.clone();
+        for(int i=0; i<chain.size(); i++) {
+            Domino domino = chain.get(i).clone();
             List<Domino> next = new ArrayList<Domino>(chain);
-            next.remove(domino);
+            next.remove(i);
             List<Domino> currentList = new ArrayList<Domino>();
-            currentList.add(domino);
+            currentList.add(chain.get(i));
             getAllChains(next, currentList);
-            List<Domino> next1 = new ArrayList<Domino>(chain);
-            next1.remove(domino1);
-            domino1.rotate();
-            List<Domino> currentList1 = new ArrayList<Domino>();
-            currentList1.add(domino1);
-            getAllChains(next1, currentList1);
+            if(domino.getFirstNum()!=domino.getSecondNum()) {
+                domino.rotate();
+                List<Domino> currentList1 = new ArrayList<Domino>();
+                currentList1.add(domino);
+                getAllChains(next, currentList1);
+            }
         }
     }
 
@@ -72,5 +72,20 @@ public class Chain {
         if(currentList.size()>1 && !stop){
             allChains.add(currentList);
         }
+    }
+    public Set<List<Domino>> getLongestChains(){
+        int max = 0;
+        for (List<Domino> list: allChains) {
+            if(list.size()>max){
+                max = list.size();
+            }
+        }
+        Set<List<Domino>> set = new HashSet<>();
+        for (List<Domino> list: allChains) {
+            if(list.size()==max){
+                set.add(list);
+            }
+        }
+        return set;
     }
 }

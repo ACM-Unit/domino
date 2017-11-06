@@ -5,7 +5,7 @@ import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.nio.NetworkTrafficSelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
 
-public class HelloWorld
+public class Launcher
 {
     public static void main(String[] args) throws Exception
     {

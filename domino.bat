@@ -5,7 +5,7 @@ set /p password="enter your database password: "
 @echo password = %password%>>src/main/resources/database.properties
 @echo off
 :getConfirmation
-set /p confirmTest=Confirm deployment of code [y/n] ?:
+set /p confirmTest=Continue in test mode [y/n] ?:
 if %confirmTest%==y goto :test
 if %confirmTest%==n goto :script
 :test

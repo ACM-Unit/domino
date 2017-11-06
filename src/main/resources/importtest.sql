@@ -4,11 +4,15 @@ CREATE TABLE `domino`.`domino` (
   `firstNum` INT NULL,
   `secondNum` INT NULL,
   PRIMARY KEY (`id`));
-  CREATE TABLE `domino`.`chain` (
-  `id` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(100),
-  `domino` INT NULL,
-  PRIMARY KEY (`id`));
+CREATE TABLE `domino`.`market` (
+  `name` VARCHAR(45) NOT NULL,
+  `domino` INT NOT NULL,
+  PRIMARY KEY (`name`, `domino`));
+CREATE TABLE `domino`.`chain` (
+  `variant` INT NOT NULL,
+  `marketname` VARCHAR(45) NOT NULL,
+  `domino` INT NOT NULL,
+  PRIMARY KEY (`name`, `domino`));
 INSERT INTO `domino`.`domino` (`id`, `firstNum`, `secondNum`) VALUES (null, '0', '0');
 INSERT INTO `domino`.`domino` (`id`, `firstNum`, `secondNum`) VALUES (null, '0', '1');
 INSERT INTO `domino`.`domino` (`id`, `firstNum`, `secondNum`) VALUES (null, '0', '2');
