@@ -69,7 +69,9 @@ public class Domino {
 
     @Override
     protected Domino clone() throws CloneNotSupportedException {
-        return new Domino(firstNum, secondNum);
+        Domino domino = new Domino(firstNum, secondNum);
+        domino.setId(id);
+        return domino;
     }
 
     @Override

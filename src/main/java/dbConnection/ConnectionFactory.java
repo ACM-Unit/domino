@@ -13,12 +13,13 @@ public class ConnectionFactory {
      * Get a connection to database
      * @return Connection object
      */
-    public static Connection getConnection()
+    public Connection getConnection()
     {
         Properties props = new Properties();
         FileInputStream in = null;
         try {
-            in = new FileInputStream("D:/MySites/domino/src/main/resources/database.properties");
+            ClassLoader classLoader = getClass().getClassLoader();
+            in = new FileInputStream(classLoader.getResource("database.properties").getFile());
         props.load(in);
         in.close();
         } catch (FileNotFoundException e) {

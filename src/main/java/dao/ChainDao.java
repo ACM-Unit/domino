@@ -1,16 +1,16 @@
 package dao;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-import entity.Chain;
+import entity.Domino;
+import entity.Market;
 
 import java.util.List;
+import java.util.Set;
 
 /**
- * Created by Admin on 05.11.2017.
+ * Created by viko0417 on 11/6/2017.
  */
 public interface ChainDao {
-    List<String> getAllChainNames();
-    Chain getChainByIds(String name);
-    boolean insertChain(Chain chain) throws MySQLIntegrityConstraintViolationException;
-    boolean deleteChain(String[] names);
+    Set<List<Domino>> getChainByName(String name);
+    boolean insertChain(Set<List<Domino>> set, String name) throws MySQLIntegrityConstraintViolationException;
 }

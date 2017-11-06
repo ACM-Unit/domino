@@ -5,12 +5,41 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="/js/jquery.js" type="text/javascript"></script>
 </head>
+<script>
+    function saves(){
+        var ids = '${ids}';
+        var formData = $('#saveChains');
+        var input = $("<input>")
+            .attr("type", "hidden")
+            .attr("name", "ids").val(ids);
+        $('#chainName').append($(input));
+        if($('#chainName').val()!='') {
+        $.ajax({
+            type: "POST",
+            url: '/save-chains',
+            data: formData.serialize(),
+            success: function (data) {
+                alert(data);
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+        }else{
+            alert("input name of market")
+        }
+    }
+</script>
 <body style="background-color: darkgrey;  text-align: center">
-<h2 style="font-size: 40pt; text-align: center">Chains</h2>
+<h2 style="font-size: 40pt; text-align: center">Markets</h2>
+<form id = "saveChains">
+<input name="chainName" id="chainName" type="text">
+<span onclick="saves()">save</span>
+</form>
 <div style="float: left; width: 80%; ">
-<c:forEach items="${chains}" var="chain">
+<c:forEach items="${markets}" var="market">
     <div style="float: left; width: 100%; display: inline-block; margin-top:20px">
-        <c:forEach items="${chain}" var="domino">
+        <c:forEach items="${market}" var="domino">
             <c:if test="${domino.firstNum != domino.secondNum}">
                 <div style="float: left; width: 81px; margin-left: 1px;">
                     <div style="float: left; border: solid black 1px;  margin-top: 20px;  width: 81px"><img
@@ -34,12 +63,13 @@
 </c:forEach>
 </div>
 <div style="float:right; width: 10%;">
-    <h2>saved chains</h2>
+    <h2>saved markets</h2>
     <c:forEach items="${names}" var="name">
-        <form action="/chain-name" method="post">
-        <input style="float: left; width:120px" type="submit" name="chainname" value="${name}">
+        <form action="/market-name" method="post">
+        <input style="float: left; width:120px" type="submit" name="marketname" value="${name}">
         </form>
     </c:forEach>
 </div>
 </body>
 </html>
+

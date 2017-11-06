@@ -22,19 +22,27 @@
         <url-pattern>get-domino</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>showChain</servlet-name>
-        <servlet-class>controllers.ShowChainServlet</servlet-class>
+        <servlet-name>showMarket</servlet-name>
+        <servlet-class>controllers.ShowMarketServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>showChain</servlet-name>
-        <url-pattern>get-chain</url-pattern>
+        <servlet-name>showMarket</servlet-name>
+        <url-pattern>get-market</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>chainName</servlet-name>
-        <servlet-class>controllers.ChainNameServlet</servlet-class>
+        <servlet-name>marketName</servlet-name>
+        <servlet-class>controllers.MarketNameServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>chainName</servlet-name>
-        <url-pattern>chain-name</url-pattern>
+        <servlet-name>marketName</servlet-name>
+        <url-pattern>market-name</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>saveChain</servlet-name>
+        <servlet-class>controllers.SaveServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>saveChain</servlet-name>
+        <url-pattern>save-chains</url-pattern>
     </servlet-mapping>
 </web-app>

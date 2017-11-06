@@ -44,11 +44,11 @@
 <script>
     function showAll() {
         $('#chain').attr('method', "post");
-        $('#chain').attr('action', "/get-chain").submit();
+        $('#chain').attr('action', "/get-market").submit();
     }
     function showLongest() {
         $('#chain').attr('method', "get");
-        $('#chain').attr('action', "/get-chain").submit();
+        $('#chain').attr('action', "/get-market").submit();
     }
     function getClear(){
         $('#market').html(' ');

@@ -5,9 +5,9 @@ import java.util.*;
 /**
  * Created by Admin on 03.11.2017.
  */
-public class Chain {
+public class Market {
     private String name;
-    private List<Domino> chain;
+    private List<Domino> market;
     private Set<List<Domino>> allChains = new HashSet<List<Domino>>();
 
     public String getName() {
@@ -18,12 +18,12 @@ public class Chain {
         this.name = name;
     }
 
-    public List<Domino> getChain() {
-        return chain;
+    public List<Domino> getMarket() {
+        return market;
     }
 
-    public void setChain(List<Domino> chain) {
-        this.chain = chain;
+    public void setMarket(List<Domino> market) {
+        this.market = market;
     }
 
     public Set<List<Domino>> getAllChains() {
@@ -34,15 +34,15 @@ public class Chain {
         this.allChains = allChains;
     }
 
-    public Chain(List<Domino> chain, String name) throws CloneNotSupportedException {
-        this.chain = chain;
+    public Market(List<Domino> market, String name) throws CloneNotSupportedException {
+        this.market = market;
         this.name = name;
-        for(int i=0; i<chain.size(); i++) {
-            Domino domino = chain.get(i).clone();
-            List<Domino> next = new ArrayList<Domino>(chain);
+        for(int i=0; i<market.size(); i++) {
+            Domino domino = market.get(i).clone();
+            List<Domino> next = new ArrayList<Domino>(market);
             next.remove(i);
             List<Domino> currentList = new ArrayList<Domino>();
-            currentList.add(chain.get(i));
+            currentList.add(market.get(i));
             getAllChains(next, currentList);
             if(domino.getFirstNum()!=domino.getSecondNum()) {
                 domino.rotate();
@@ -73,7 +73,7 @@ public class Chain {
             allChains.add(currentList);
         }
     }
-    public Set<List<Domino>> getLongestChains(){
+    public Set<List<Domino>> getLongestMarkets(){
         int max = 0;
         for (List<Domino> list: allChains) {
             if(list.size()>max){

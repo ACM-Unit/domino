@@ -1,6 +1,6 @@
 package controllers;
 
-import services.ChainService;
+import services.MarketService;
 import services.DominoService;
 
 import javax.servlet.ServletException;
@@ -12,13 +12,13 @@ import java.io.IOException;
 /**
  * Created by Admin on 06.11.2017.
  */
-public class ChainNameServlet extends HttpServlet {
+public class MarketNameServlet extends HttpServlet {
     private DominoService service = new DominoService();
-    private ChainService chainService = new ChainService();
+    private MarketService marketService = new MarketService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        System.out.println(request.getParameter("chainname"));
-        request.getRequestDispatcher("/pages/showChain.jsp").forward(request,response);
+        System.out.println(request.getParameter("marketname"));
+        request.getRequestDispatcher("/pages/showMarket.jsp").forward(request,response);
     }
 
 }

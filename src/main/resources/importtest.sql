@@ -12,7 +12,13 @@ CREATE TABLE `domino`.`chain` (
   `variant` INT NOT NULL,
   `marketname` VARCHAR(45) NOT NULL,
   `domino` INT NOT NULL,
-  PRIMARY KEY (`variant`, `marketname`));
+  PRIMARY KEY (`variant`, `marketname`, `domino`),
+  INDEX `fk1_idx` (`marketname` ASC),
+  CONSTRAINT `fk1`
+  FOREIGN KEY (`marketname`)
+  REFERENCES `domino`.`market` (`name`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE);
 INSERT INTO `domino`.`domino` (`id`, `firstNum`, `secondNum`) VALUES (null, '0', '0');
 INSERT INTO `domino`.`domino` (`id`, `firstNum`, `secondNum`) VALUES (null, '0', '1');
 INSERT INTO `domino`.`domino` (`id`, `firstNum`, `secondNum`) VALUES (null, '0', '2');
