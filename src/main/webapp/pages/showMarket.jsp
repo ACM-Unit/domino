@@ -31,10 +31,10 @@
     }
 </script>
 <body style="background-color: darkgrey;  text-align: center">
-<h2 style="font-size: 40pt; text-align: center">Markets</h2>
+<h2 style="font-size: 40pt; text-align: center">Chains</h2>
 <form id = "saveChains">
 <input name="chainName" id="chainName" type="text">
-<span onclick="saves()">save</span>
+<span style="margin: 10px; border: solid 2px red; display: inline-block; background-color: white; width: 70px; height: 20px; cursor: pointer" onclick="saves()">save</span>
 </form>
 <div style="float: left; width: 80%; ">
 <c:forEach items="${markets}" var="market">
@@ -63,13 +63,34 @@
 </c:forEach>
 </div>
 <div style="float:right; width: 10%;">
-    <h2>saved markets</h2>
+    <h2>saved chains</h2>
     <c:forEach items="${names}" var="name">
-        <form action="/market-name" method="post">
-        <input style="float: left; width:120px" type="submit" name="marketname" value="${name}">
+        <span>
+        <form id="saved-chains" action="/get-saved-chains" method="post">
+            <input type="hidden" name="ids" value="${ids}">
+            <input style="float: left; width:100px" type="submit" value="${name}">
+            <input type="hidden" name="marketname" value="${name}">
+            <span onclick="deleteChain($(this))" style="float: right; width:30px; background-color: red" name="del" value="del">del</span>
         </form>
+        </span>
     </c:forEach>
 </div>
 </body>
 </html>
 
+<script>
+    function deleteChain(span) {
+        var formData = $('#saved-chains');
+        $.ajax({
+            type: "POST",
+            url: '/delete-chains',
+            data: formData.serialize(),
+            success: function (data) {
+                span.parents('span').remove();
+            },
+            error: function (e) {
+                console.log(e);
+            }
+        });
+    }
+</script>

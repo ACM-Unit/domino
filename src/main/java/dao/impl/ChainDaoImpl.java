@@ -1,45 +1,50 @@
 package dao.impl;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import dao.ChainDao;
+import dao.MarketDao;
 import dbConnection.ConnectionFactory;
+import entity.Chain;
 import entity.Domino;
-import entity.Market;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by viko0417 on 11/6/2017.
  */
 public class ChainDaoImpl implements ChainDao {
     @Override
-    public Set<List<Domino>> getChainByName(String name) {
+    public Chain getChainByName(String name) {
+        MarketDao dao = new MarketDaoImpl();
         ConnectionFactory connector = new ConnectionFactory();
         Connection connection = connector.getConnection();
-        Set<List<Domino>> set = null;
+        Chain chain = new Chain();
+        Map<Integer, List<Domino>> map = new LinkedHashMap<>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            stmt = connection.prepareStatement("SELECT * FROM domino d, chain c where d.id = c.domino  and c.marketname = ?");
+            stmt = connection.prepareStatement("SELECT * FROM chain where marketname = ?");
             stmt.setString(1, name);
-            int currentvariant = 1;
+            rs = stmt.executeQuery();
+            int currentvariant = 0;
             List<Domino> list = new ArrayList<>();
             while (rs.next()) {
                 Domino domino = new Domino(rs.getInt("firstNum"), rs.getInt("secondNum"));
-                domino.setId(rs.getInt("id"));
-                list.add(domino);
-                if(currentvariant!=rs.getInt("variant")){
-                    set.add(list);
+                if(currentvariant!=rs.getInt("variant")|| rs.isLast()){
+                    if(rs.isLast()){
+                        list.add(domino);
+                    }
+                    map.put(currentvariant, list);
                     list = new ArrayList<>();
                     currentvariant=rs.getInt("variant");
                 }
+                list.add(domino);
             }
+            chain.setMarket(dao.getMarketByName(name));
+            chain.setChains(map);
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
@@ -51,33 +56,28 @@ public class ChainDaoImpl implements ChainDao {
                 e.printStackTrace();
             }
         }
-        return set;
+        return chain;
     }
 
     @Override
-    public boolean insertChain(Set<List<Domino>> set, String name) {
+    public boolean insertChain(Chain chain) {
         ConnectionFactory connector = new ConnectionFactory() ;
         Connection connection = connector.getConnection();
         PreparedStatement stmt = null;
-        List<List<Domino>> list = new ArrayList();
-        list.addAll(set);
-        System.out.println("size: "+list.size());
+        Map<Integer, List<Domino>> map = chain.getChains();
         try {
-            for(int n = 0; n < list.size(); n++) {
+            String query ="";
+            for(int n:map.keySet()) {
                 String idString = "";
-                for(int i=0; i<list.get(n).size(); i++){
-                    if(i==list.get(n).size()-1){
-                        idString +=list.get(n).get(i).getId();
-                        System.out.println(idString);
-                    }else{
-                        idString+=list.get(n).get(i).getId()+",";
-                        System.out.println(idString);
-                    }
+                List<Domino> list = map.get(n);
+                for(Domino domino:list){
+                    query+="select null, "+n+", '"+ chain.getMarket().getName()+"', "+domino.getFirstNum()+", "+domino.getSecondNum()+" from dual union all ";
                 }
-                stmt = connection.prepareStatement("INSERT INTO `domino`.`chain` SELECT "+(n+1)+", '" + name + "', id FROM domino where id in (" + idString + ");");
-                int i = stmt.executeUpdate();
-                System.out.println("==========="+i);
             }
+            query = query.substring(0, query.length() - 11);
+            System.out.println(query);
+            stmt = connection.prepareStatement("INSERT INTO `domino`.`chain` "+query);
+            stmt.executeUpdate();
         } catch (SQLException ex) {
             return false;
         }finally {

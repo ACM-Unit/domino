@@ -83,9 +83,9 @@
     }
     function getRandomDomino() {
         var formData = $('#Domino');
-        var regexpNum = new RegExp("^[2-6]$");
+        var regexpNum = new RegExp("^[2-9]$");
         var num = $('#num').val();
-        if(num!='' && regexpNum.test(num)) {
+        if(num!='') {
             $.ajax({
                 type: "GET",
                 url: '/get-domino?num=' + num,

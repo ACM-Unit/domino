@@ -1,10 +1,8 @@
 package controllers;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import entity.Market;
 import services.DominoService;
 import services.MarketService;
-import sun.security.provider.certpath.OCSPResponse;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

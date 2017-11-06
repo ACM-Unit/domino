@@ -9,10 +9,12 @@ CREATE TABLE `domino`.`market` (
   `domino` INT NOT NULL,
   PRIMARY KEY (`name`, `domino`));
 CREATE TABLE `domino`.`chain` (
+  `id` INT NOT NULL AUTO_INCREMENT,
   `variant` INT NOT NULL,
   `marketname` VARCHAR(45) NOT NULL,
-  `domino` INT NOT NULL,
-  PRIMARY KEY (`variant`, `marketname`, `domino`),
+  `firstnum` INT NOT NULL,
+  `secondnum` INT NOT NULL,
+  PRIMARY KEY (`id`),
   INDEX `fk1_idx` (`marketname` ASC),
   CONSTRAINT `fk1`
   FOREIGN KEY (`marketname`)

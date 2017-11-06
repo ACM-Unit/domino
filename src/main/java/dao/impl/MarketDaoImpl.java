@@ -56,6 +56,7 @@ public class MarketDaoImpl implements MarketDao {
         try {
             stmt = connection.prepareStatement("SELECT * FROM domino d, market m where d.id = m.domino  and m.name = ?");
             stmt.setString(1, name);
+            rs=stmt.executeQuery();
             List<Domino> list = new ArrayList<>();
             while (rs.next()) {
                 Domino domino = new Domino(rs.getInt("firstNum"), rs.getInt("secondNum"));

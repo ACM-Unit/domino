@@ -48,4 +48,5 @@ public class ShowServlet extends HttpServlet {
         request.setAttribute("ids", idString);
         request.getRequestDispatcher("/pages/showDomino.jsp").forward(request,response);
     }
+
 }

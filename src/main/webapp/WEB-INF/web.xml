@@ -31,11 +31,11 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>marketName</servlet-name>
-        <servlet-class>controllers.MarketNameServlet</servlet-class>
+        <servlet-class>controllers.ShowSavedServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>marketName</servlet-name>
-        <url-pattern>market-name</url-pattern>
+        <url-pattern>get-saved-chains</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>saveChain</servlet-name>
@@ -44,5 +44,13 @@
     <servlet-mapping>
         <servlet-name>saveChain</servlet-name>
         <url-pattern>save-chains</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>deleteChain</servlet-name>
+        <servlet-class>controllers.DeleteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>deleteChain</servlet-name>
+        <url-pattern>delete-chains</url-pattern>
     </servlet-mapping>
 </web-app>
