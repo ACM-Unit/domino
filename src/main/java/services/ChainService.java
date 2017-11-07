@@ -5,7 +5,7 @@ import dao.impl.ChainDaoImpl;
 import entity.Chain;
 
 /**
- * Created by Admin on 06.11.2017.
+ * Created by Viacheslav Koshchii on 06.11.2017.
  */
 public class ChainService {
     private ChainDao chainDao = new ChainDaoImpl();

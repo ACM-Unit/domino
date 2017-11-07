@@ -2,19 +2,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
     <script src="/js/jquery.js" type="text/javascript"></script>
 </head>
 <body style="background-color: darkgrey;  text-align: center">
+<a href="/domino" style="float:left; margin-left: 20px"> to main page</a>
 <h2 style="font-size: 40pt; text-align: center">DOMINO</h2>
 <form id="domino">
     <div style="width: 100%; display: inline-block">
     <c:forEach items="${dominoes}" var="domino">
         <div style="float: left; margin: 3px; width: 40px">
-            <div style="float: left; border: solid black 1px; width: 40px"><img src="/images/${domino.firstNum}-1.jpg"
+            <div style="float: left; border: solid black 1px; width: 40px"><img src="<c:url value='../images/${domino.firstNum}-1.jpg'/>"
                                                                                 style="height: 40px"/>
-                <img
-                    src="/images/${domino.secondNum}-1.jpg" style="height: 40px"/>
+                <img src="<c:url value='../images/${domino.secondNum}-1.jpg'/>" style="height: 40px"/>
             </div>
         </div>
     </c:forEach>
@@ -30,26 +29,25 @@
 <form id="chain">
     <div style="float: left; width: 100%" id="market"></div>
     <span style="float: left; margin: 10px; display: none; background-color: white; width: 150px; height: 20px; cursor: pointer"
-            id="showLongest" onclick="showLongest()">show longest
+            id="showLongest" onclick="show('Longest')">show longest
     </span>
     <span style="float: left; margin: 10px; display: none; background-color: white; width: 150px; height: 20px; cursor: pointer"
-            id="showAll" onclick="showAll()">show all
+            id="showAll" onclick="show('All')">show all
     </span>
     <span style="float: left; margin: 10px; display: none; background-color: white; width: 150px; height: 20px; cursor: pointer"
           id="clear" onclick="getClear()">clear</span>
+    <input id="title" type="hidden" name="title" value="">
 </form>
-
+<div style="display: none; position: fixed; z-index:9999; top:0; left:0; height:100%; width:100%; background: rgba( 255, 255, 255, .8 ) url('/images/loader.gif') 50% 50% no-repeat; }" id="waiting"></div>
 </body>
 </html>
 <script>
-    function showAll() {
+    function show(value) {
+        $('#title').val(value);
         $('#chain').attr('method', "post");
         $('#chain').attr('action', "/get-market").submit();
     }
-    function showLongest() {
-        $('#chain').attr('method', "get");
-        $('#chain').attr('action', "/get-market").submit();
-    }
+
     function getClear(){
         $('#market').html(' ');
         $('#showAll').css('display', 'none');
@@ -62,11 +60,13 @@
     }
     function getDomino() {
         var formData = $('#Domino');
+        $('#waiting').css('display', 'block');
         $.ajax({
             type: "POST",
             url: '/get-domino',
             data: formData.serialize(),
             success: function (data) {
+                $('#waiting').css('display', 'none');
                 $('#market').html(data);
                 $('#showAll').css('display', 'block');
                 $('#showLongest').css('display', 'block');
@@ -85,7 +85,7 @@
         var formData = $('#Domino');
         var regexpNum = new RegExp("^[2-9]$");
         var num = $('#num').val();
-        if(num!='') {
+        if(num!='' || regexpNum.test(num)) {
             $.ajax({
                 type: "GET",
                 url: '/get-domino?num=' + num,
@@ -105,7 +105,7 @@
                 }
             });
         }else{
-            alert('input number between 2 and 6');
+            alert('input number between 2 and 9');
         }
     }
 </script>

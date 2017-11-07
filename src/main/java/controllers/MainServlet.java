@@ -1,6 +1,6 @@
 package controllers;
 
-import services.DominoService;
+import services.MarketService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -8,12 +8,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class DominoServlet extends HttpServlet {
-    private DominoService service = new DominoService();
+/**
+ * Created by Viacheslav Koshchii on 11/7/2017.
+ */
+public class MainServlet  extends HttpServlet {
+    private MarketService marketService = new MarketService();
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
+        request.getRequestDispatcher("/pages/startPage.jsp").forward(request,response);
 
-        request.setAttribute("dominoes", service.getAll());
-        request.getRequestDispatcher("/pages/home.jsp").forward(request,response);
     }
 }

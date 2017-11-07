@@ -6,11 +6,11 @@ import entity.Market;
 import java.util.List;
 
 /**
- * Created by Admin on 05.11.2017.
+ * Created by Viacheslav Koshchii on 05.11.2017.
  */
 public interface MarketDao {
     List<String> getAllMarketNames();
     Market getMarketByName(String name);
     boolean insertMarket(Market market) throws MySQLIntegrityConstraintViolationException;
-    boolean deleteMarket(String[] names);
+    boolean deleteMarket(String name);
 }

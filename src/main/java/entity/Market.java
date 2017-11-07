@@ -1,15 +1,17 @@
 package entity;
 
+import org.apache.log4j.Logger;
+
 import java.util.*;
 
 /**
- * Created by Admin on 03.11.2017.
+ * Created by Viacheslav Koshchii on 03.11.2017.
  */
 public class Market {
     private String name;
     private List<Domino> market;
     private Set<List<Domino>> allChains = new HashSet<List<Domino>>();
-
+    private Logger LOGGER = Logger.getLogger(getClass());
     public String getName() {
         return name;
     }
@@ -73,7 +75,7 @@ public class Market {
             allChains.add(currentList);
         }
     }
-    public Set<List<Domino>> getLongestMarkets(){
+    public Set<List<Domino>> getLongestChains(){
         int max = 0;
         for (List<Domino> list: allChains) {
             if(list.size()>max){

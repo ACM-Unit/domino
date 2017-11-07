@@ -5,6 +5,7 @@ import dao.MarketDao;
 import dbConnection.ConnectionFactory;
 import entity.Chain;
 import entity.Domino;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,9 +14,10 @@ import java.sql.SQLException;
 import java.util.*;
 
 /**
- * Created by viko0417 on 11/6/2017.
+ * Created by Viacheslav Koshchii on 11/6/2017.
  */
 public class ChainDaoImpl implements ChainDao {
+    private Logger LOGGER = Logger.getLogger(getClass());
     @Override
     public Chain getChainByName(String name) {
         MarketDao dao = new MarketDaoImpl();
@@ -68,14 +70,13 @@ public class ChainDaoImpl implements ChainDao {
         try {
             String query ="";
             for(int n:map.keySet()) {
-                String idString = "";
                 List<Domino> list = map.get(n);
                 for(Domino domino:list){
                     query+="select null, "+n+", '"+ chain.getMarket().getName()+"', "+domino.getFirstNum()+", "+domino.getSecondNum()+" from dual union all ";
                 }
             }
             query = query.substring(0, query.length() - 11);
-            System.out.println(query);
+            LOGGER.info(query);
             stmt = connection.prepareStatement("INSERT INTO `domino`.`chain` "+query);
             stmt.executeUpdate();
         } catch (SQLException ex) {

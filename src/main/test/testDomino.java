@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by Admin on 03.11.2017.
+ * Created by Viacheslav Koshchii on 03.11.2017.
  */
 public class testDomino {
     private DominoService service = new DominoService();
@@ -30,7 +30,7 @@ public class testDomino {
             e.printStackTrace();
         }
         Set<String> set = new HashSet<String>();
-        for (List<Domino> markets : market.getLongestMarkets()) {
+        for (List<Domino> markets : market.getLongestChains()) {
             String s = "";
             for (Domino domino : markets) {
                 s += domino.getFirstNum() + ":" + domino.getSecondNum() + " ; ";
@@ -50,7 +50,7 @@ public class testDomino {
         }
         Market market = null;
         try {
-            market = new Market(listDomino, "newwwjjhjhjMarket");
+            market = new Market(listDomino, "new Market");
             MarketDao dao1 = new MarketDaoImpl();
             dao1.insertMarket(market);
         } catch (CloneNotSupportedException e) {
@@ -58,26 +58,13 @@ public class testDomino {
         } catch (MySQLIntegrityConstraintViolationException e) {
             System.out.println("name not unique");
         }
-        ChainDao dao2 = new ChainDaoImpl();
-        try {
-            for (List<Domino> markets : market.getAllChains()) {
-                String s = "";
-                for (Domino domino : markets) {
-                    s += domino.getFirstNum() + ":" + domino.getSecondNum() + " ; ";
-                }
-                System.out.println(s);
-            }
-            dao2.insertChain(market.getAllChains(), market.getName());
-        } catch (MySQLIntegrityConstraintViolationException e) {
-            System.out.println("name not uniqu1");
-        }
 
     }
 
     @Test
     public void testDeleteMarket() {
         MarketDao dao1 = new MarketDaoImpl();
-        dao1.deleteMarket(new String[]{"newMarket"});
+        dao1.deleteMarket("newMarket");
     }
     @Test
     public void testRandom(){

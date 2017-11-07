@@ -1,13 +1,16 @@
 package entity;
 
+import org.apache.log4j.Logger;
+
 /**
- * Created by Admin on 03.11.2017.
+ * Created by Viacheslav Koshchii on 03.11.2017.
  */
 public class Domino {
     private int id;
     private int firstNum;
     private int secondNum;
     private boolean isJoin;
+    private Logger LOGGER = Logger.getLogger(getClass());
 
 
     public void rotate(){

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Admin on 06.11.2017.
+ * Created by Viacheslav Koshchii on 06.11.2017.
  */
 public class MarketService {
     private MarketDao dao = new MarketDaoImpl();
@@ -44,7 +44,7 @@ public class MarketService {
         return true;
     }
 
-    public boolean saveMarketAndLongestChains(Market market) throws MySQLIntegrityConstraintViolationException {
+    public boolean saveMarketAndLongestChains(Market market){
 
         try {
             dao.insertMarket(market);
@@ -52,7 +52,7 @@ public class MarketService {
             Map<Integer, List<Domino>> map = new HashMap<>();
             chain.setMarket(market);
             List<List<Domino>> list = new ArrayList<>();
-            list.addAll(market.getLongestMarkets());
+            list.addAll(market.getLongestChains());
             for (int i=0; i<list.size(); i++){
                 map.put(i, list.get(i));
             }
@@ -63,7 +63,7 @@ public class MarketService {
         }
         return true;
     }
-    public void delete(String[] names){
-        dao.deleteMarket(names);
+    public void delete(String name){
+        dao.deleteMarket(name);
     }
 }

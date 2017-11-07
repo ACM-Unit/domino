@@ -11,7 +11,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>domino</servlet-name>
-        <url-pattern>domino</url-pattern>
+        <url-pattern>start-game</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>showAll</servlet-name>
@@ -23,19 +23,11 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>showMarket</servlet-name>
-        <servlet-class>controllers.ShowMarketServlet</servlet-class>
+        <servlet-class>controllers.ShowChainsServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>showMarket</servlet-name>
         <url-pattern>get-market</url-pattern>
-    </servlet-mapping>
-    <servlet>
-        <servlet-name>marketName</servlet-name>
-        <servlet-class>controllers.ShowSavedServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>marketName</servlet-name>
-        <url-pattern>get-saved-chains</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>saveChain</servlet-name>
@@ -52,5 +44,13 @@
     <servlet-mapping>
         <servlet-name>deleteChain</servlet-name>
         <url-pattern>delete-chains</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>main</servlet-name>
+        <servlet-class>controllers.MainServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>main</servlet-name>
+        <url-pattern>/domino</url-pattern>
     </servlet-mapping>
 </web-app>

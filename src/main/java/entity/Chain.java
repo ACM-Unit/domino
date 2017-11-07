@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Admin on 06.11.2017.
+ * Created by Viacheslav Koshchii on 06.11.2017.
  */
 public class Chain {
     private Market market;

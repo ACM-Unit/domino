@@ -5,7 +5,7 @@ import entity.Domino;
 import java.util.List;
 
 /**
- * Created by Admin on 05.11.2017.
+ * Created by Viacheslav Koshchii on 05.11.2017.
  */
 public interface DominoDao {
     List<Domino> getAllDominos();

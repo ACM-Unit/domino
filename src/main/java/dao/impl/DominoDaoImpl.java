@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Admin on 05.11.2017.
+ * Created by Viacheslav Koshchii on 05.11.2017.
  */
 public class DominoDaoImpl implements DominoDao {
 

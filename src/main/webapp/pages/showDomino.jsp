@@ -8,5 +8,6 @@
         </div>
     </div>
     <input name="ids" type="hidden" value="${ids}">
+    <input name="marketname" type="hidden" value="-">
 </c:forEach>
 

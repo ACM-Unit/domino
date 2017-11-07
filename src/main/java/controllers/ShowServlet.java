@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by Admin on 05.11.2017.
+ * Created by Viacheslav Koshchii on 05.11.2017.
  */
 public class ShowServlet extends HttpServlet {
     private DominoService service = new DominoService();

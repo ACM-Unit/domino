@@ -1,5 +1,6 @@
 package dbConnection;
 
+import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionFactory {
+
     /**
      * Get a connection to database
      * @return Connection object
@@ -27,13 +29,19 @@ public class ConnectionFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        ConnectionPool jdbcObj = new ConnectionPool();
         try {
+            DataSource dataSource = jdbcObj.setUpPool();
+            jdbcObj.printDbStatus();
+            dataSource.getConnection();
+            jdbcObj.printDbStatus();
             Class.forName("com.mysql.jdbc.Driver");
-            System.out.println("jdbc:mysql://localhost/domino?user="+props.getProperty("user")+"&password="+props.getProperty("password")+"&characterEncoding=UTF-8");
-            return DriverManager.getConnection("jdbc:mysql://localhost/domino?user="+props.getProperty("user")+"&password="+props.getProperty("password")+"&characterEncoding=UTF-8");
+            return dataSource.getConnection();
         } catch (ClassNotFoundException e) {
             System.out.println("driver sql not found");
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;

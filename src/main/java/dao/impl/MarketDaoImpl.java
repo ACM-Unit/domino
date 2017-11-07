@@ -5,6 +5,7 @@ import dao.MarketDao;
 import dbConnection.ConnectionFactory;
 import entity.Market;
 import entity.Domino;
+import org.apache.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Admin on 05.11.2017.
+ * Created by Viacheslav Koshchii on 05.11.2017.
  */
 public class MarketDaoImpl implements MarketDao {
-
+    private Logger LOGGER = Logger.getLogger(getClass());
     @Override
     public List<String> getAllMarketNames() {
         ConnectionFactory connector = new ConnectionFactory();
@@ -95,6 +96,7 @@ public class MarketDaoImpl implements MarketDao {
         PreparedStatement stmt = null;
         try {
             stmt = connection.prepareStatement("INSERT INTO `domino`.`market` SELECT '"+market.getName()+"', id FROM domino where id in ("+idString+")");
+            LOGGER.info("INSERT INTO `domino`.`market` SELECT '"+market.getName()+"', id FROM domino where id in ("+idString+")");
             int i = stmt.executeUpdate();
             if(i == 1) {
                 return true;
@@ -115,20 +117,13 @@ public class MarketDaoImpl implements MarketDao {
     }
 
     @Override
-    public boolean deleteMarket(String[] names) {
-        String idString = "";
-        for(int i=0; i<names.length; i++){
-            if(i==names.length-1){
-                idString +="'"+names[i]+"'";
-            }else{
-                idString+="'"+names[i]+"',";
-            }
-        }
+    public boolean deleteMarket(String name) {
         ConnectionFactory connector = new ConnectionFactory();
         Connection connection = connector.getConnection();
         PreparedStatement stmt = null;
         try {
-            stmt = connection.prepareStatement("DELETE FROM market WHERE name in (" + idString+")");
+            stmt = connection.prepareStatement("DELETE FROM market WHERE name = ?");
+            stmt.setString(1, name);
             int i = stmt.executeUpdate();
             if(i == 1) {
                 return true;
