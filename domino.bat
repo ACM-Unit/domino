@@ -13,6 +13,7 @@ set import=importtest
 goto :continue
 :script
 set import=import
+call mvn package -Duser=%user% -Dpassword=%password% -Dimport=%import%
 goto :continue
 :continue
-mvn jetty:run -Duser=%user% -Dpassword=%password% -Dimport=%import%
+call mvn jetty:run -Duser=%user% -Dpassword=%password% -Dimport=%import%

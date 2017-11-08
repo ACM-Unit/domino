@@ -79,7 +79,6 @@
             <version>${jstl.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.codehaus.mojo/sql-maven-plugin -->
         <dependency>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>sql-maven-plugin</artifactId>
@@ -97,7 +96,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>domino</finalName>
+        <finalName>web-app</finalName>
         <plugins>
             <plugin>
                 <groupId>org.eclipse.jetty</groupId>
@@ -149,8 +148,8 @@
                 <configuration>
                     <driver>com.mysql.jdbc.Driver</driver>
                     <url>jdbc:mysql://localhost:3306</url>
-                    <username>root</username>
-                    <password>root</password>
+                    <username>${user}</username>
+                    <password>${password}</password>
                 </configuration>
 
                 <executions>
@@ -177,7 +176,7 @@
                         <configuration>
                             <autocommit>true</autocommit>
                             <srcFiles>
-                                <srcFile>src/main/resources/importtest.sql</srcFile>
+                                <srcFile>src/main/resources/${import}.sql</srcFile>
                             </srcFiles>
                         </configuration>
                     </execution>
