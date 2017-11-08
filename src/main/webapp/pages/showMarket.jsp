@@ -37,12 +37,27 @@
                         var input3 = $("<input>")
                             .attr("name", "marketname")
                             .attr("type", "hidden")
-                            .attr("value", data).appendTo(form);
+                            .attr("value", "-").appendTo(form);
                         var input4 = $("<input>")
                             .attr("id", "market")
                             .attr("name", "market")
                             .attr("type", "hidden")
                             .attr("value", data).appendTo(form);
+                        var input5 = $("<input>")
+                            .attr("id", "begin")
+                            .attr("name", "begin")
+                            .attr("type", "hidden")
+                            .attr("value", "1").appendTo(form);
+                        var input6 = $("<input>")
+                            .attr("id", "end")
+                            .attr("name", "end")
+                            .attr("type", "hidden")
+                            .attr("value", "0").appendTo(form);
+                        var input7 = $("<input>")
+                            .attr("id", "title")
+                            .attr("name", "title")
+                            .attr("type", "hidden")
+                            .attr("value", "${title}").appendTo(form);
                         var inSpan = $('<span>')
                             .attr("onclick", "deleteChain($(this), '" + data + "')")
                             .attr("style", "float: right; width:19%; background-color: red; cursor: pointer; margin-left: 1%; margin-top: 2px")
@@ -77,45 +92,61 @@
         });
     }
 </script>
-<body style="margin-left:10%; margin-right: 20%; background-color: darkgrey;  text-align: center">
+<body style="margin-left:4%; margin-right: 10%; background-color: darkgrey;  text-align: center">
 <a href="/domino" style="float:left; margin-left: 20px"> to main page</a>
 <a href="/start-game" style="float:right; margin-right: 20px">start</a>
 <h2 style="font-size: 40pt; text-align: center">Chains</h2>
-<c:if test="${marketSize != 0}">
-<form style="float:left; width: 80%; text-align: left;" id="saveChains">
-    <input name="chainName" id="chainName" type="text">
-    <input type="hidden" name="title" value="${title}">
-    <span style="text-align: center; margin: 10px; border: solid 2px red; display: inline-block; background-color: white; width: 70px; height: 20px; cursor: pointer"
-          onclick="saves()">save</span>
-</form>
+<c:if test="${marketSize != 0 && saved != true}">
+    <form style="float:left; width: 80%; text-align: left;" id="saveChains">
+        <input name="chainName" id="chainName" type="text">
+        <input type="hidden" name="title" value="${title}">
+        <span style="text-align: center; margin: 10px; border: solid 2px red; display: inline-block; background-color: white; width: 70px; height: 20px; cursor: pointer"
+              onclick="saves()">save</span>
+    </form>
 </c:if>
 <div style="float: left; width: 80%; ">
-    <c:forEach items="${markets}" var="market">
-        <div style="float: left; width: 100%; display: inline-block; margin-top:20px">
-            <c:forEach items="${market}" var="domino">
-                <c:if test="${domino.firstNum != domino.secondNum}">
-                    <div style="float: left; width: 81px; margin-left: 1px;">
-                        <div style="float: left; border: solid black 1px;  margin-top: 20px;  width: 81px"><img
-                                src="/images/${domino.firstNum}.jpg" style="height: 40px; float: left;"/>
-                            <div style="float: left; height: 40px; width: 1px; background-color: lightgrey"></div>
-                            <img
-                                    src="/images/${domino.secondNum}.jpg" style="height: 40px; float: left;"/>
+    <c:if test="${timeout==true}">
+        <h2 style="float: left; width: 60%">time out</h2></br>
+        <h2 style="float: left; width: 60%">too much result...</h2>
+    </c:if>
+    <c:if test="${timeout==false}">
+        <c:forEach items="${markets}" var="market" begin="${begin}" end="${end}" varStatus="loop">
+            <div style="float: left; width: 100%; display: inline-block; margin-top:20px">
+                <c:forEach items="${market}" var="domino">
+                    <c:if test="${domino.firstNum != domino.secondNum}">
+                        <div style="float: left; width: 61px; margin-left: 1px;">
+                            <div style="float: left; border: solid black 1px;  margin-top: 15px;  width: 61px"><img
+                                    src="/images/${domino.firstNum}.jpg" style="height: 30px; float: left;"/>
+                                <div style="float: left; height: 30px; width: 1px; background-color: lightgrey"></div>
+                                <img
+                                        src="/images/${domino.secondNum}.jpg" style="height: 30px; float: left;"/>
+                            </div>
                         </div>
-                    </div>
-                </c:if>
-                <c:if test="${domino.firstNum == domino.secondNum}">
-                    <div style="float: left; width: 40px; margin-left: 1px;">
-                        <div style="float: left; border: solid black 1px;  width: 40px"><img
-                                src="/images/${domino.firstNum}-1.jpg" style="height: 40px"/>
-                            <div style="height: 1px; width: 40px; background-color: lightgrey"></div>
-                            <img
-                                    src="/images/${domino.secondNum}-1.jpg" style="height: 40px"/>
+                    </c:if>
+                    <c:if test="${domino.firstNum == domino.secondNum}">
+                        <div style="float: left; width: 30px; margin-left: 1px;">
+                            <div style="float: left; border: solid black 1px;  width: 30px"><img
+                                    src="/images/${domino.firstNum}-1.jpg" style="height: 30px"/>
+                                <div style="height: 1px; width: 30px; background-color: lightgrey"></div>
+                                <img
+                                        src="/images/${domino.secondNum}-1.jpg" style="height: 30px"/>
+                            </div>
                         </div>
-                    </div>
-                </c:if>
-            </c:forEach>
-        </div>
-    </c:forEach>
+                    </c:if>
+                </c:forEach>
+            </div>
+            <c:if test="${loop.index==end}">
+                <form id="result" action="/get-market" method="post">
+                    <input type="hidden" name="ids" value="${ids}">
+                    <input type="hidden" name="begin" value="${begin}">
+                    <input type="hidden" name="end" value="${end}">
+                    <input type="hidden" name="marketname" value="-">
+                    <input type="hidden" name="title" value="${title}">
+                    too much result...<input type="submit"value="more?"/>
+                </form>
+            </c:if>
+        </c:forEach>
+    </c:if>
 </div>
 <div id="block-of-saved-chains" style="float:right; width: 20%;">
     <h2>saved chains</h2>
@@ -126,9 +157,12 @@
             <input style="float: left; width:80%" type="submit" value="${name}">
             <input type="hidden" name="marketname" value="${name}">
             <input type="hidden" name="title" value="${title}">
+            <input type="hidden" name="begin" value="1">
+            <input type="hidden" name="end" value="0">
             <input id="market" type="hidden" name="market" value="${name}">
             <span onclick="deleteChain($(this), '${name}')"
-                  style="float: right; width:19%; background-color: red; cursor: pointer; margin-left: 1%; margin-top: 2px" name="del"
+                  style="float: right; width:19%; background-color: red; cursor: pointer; margin-left: 1%; margin-top: 2px"
+                  name="del"
                   value="del">del</span>
         </form>
         </span>

@@ -149,8 +149,8 @@
                 <configuration>
                     <driver>com.mysql.jdbc.Driver</driver>
                     <url>jdbc:mysql://localhost:3306</url>
-                    <username>${user}</username>
-                    <password>${password}</password>
+                    <username>root</username>
+                    <password>root</password>
                 </configuration>
 
                 <executions>
@@ -177,7 +177,7 @@
                         <configuration>
                             <autocommit>true</autocommit>
                             <srcFiles>
-                                <srcFile>src/main/resources/${import}.sql</srcFile>
+                                <srcFile>src/main/resources/importtest.sql</srcFile>
                             </srcFiles>
                         </configuration>
                     </execution>

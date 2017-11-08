@@ -2,14 +2,11 @@ package dao.impl;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import dao.MarketDao;
-import dbConnection.ConnectionFactory;
-import entity.Market;
+import dbConnection.DbConnection;
 import entity.Domino;
+import entity.Market;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +14,12 @@ import java.util.List;
 /**
  * Created by Viacheslav Koshchii on 05.11.2017.
  */
-public class MarketDaoImpl implements MarketDao {
+public class MarketDaoImpl extends DbConnection implements MarketDao {
     private Logger LOGGER = Logger.getLogger(getClass());
     @Override
     public List<String> getAllMarketNames() {
-        ConnectionFactory connector = new ConnectionFactory();
-        Connection connection = connector.getConnection();
+        getConnection();
         List<String> names = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
         try {
             stmt = connection.prepareStatement("SELECT distinct name FROM market");
             rs = stmt.executeQuery();
@@ -36,24 +30,15 @@ public class MarketDaoImpl implements MarketDao {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                rs.close();
-                stmt.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            close();
         }
         return names;
     }
 
     @Override
     public Market getMarketByName(String name) {
-        ConnectionFactory connector = new ConnectionFactory();
-        Connection connection = connector.getConnection();
+        getConnection();
         Market market = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
         try {
             stmt = connection.prepareStatement("SELECT * FROM domino d, market m where d.id = m.domino  and m.name = ?");
             stmt.setString(1, name);
@@ -64,19 +49,12 @@ public class MarketDaoImpl implements MarketDao {
                 domino.setId(rs.getInt("id"));
                 list.add(domino);
             }
+
             market = new Market(list, name);
         } catch (SQLException ex) {
             ex.printStackTrace();
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
         } finally {
-            try {
-                rs.close();
-                stmt.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            close();
         }
         return market;
     }
@@ -91,9 +69,7 @@ public class MarketDaoImpl implements MarketDao {
                 idString+=market.getMarket().get(i).getId()+",";
             }
         }
-        ConnectionFactory connector = new ConnectionFactory() ;
-        Connection connection = connector.getConnection();
-        PreparedStatement stmt = null;
+        getConnection();
         try {
             stmt = connection.prepareStatement("INSERT INTO `domino`.`market` SELECT '"+market.getName()+"', id FROM domino where id in ("+idString+")");
             LOGGER.info("INSERT INTO `domino`.`market` SELECT '"+market.getName()+"', id FROM domino where id in ("+idString+")");
@@ -106,21 +82,14 @@ public class MarketDaoImpl implements MarketDao {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }finally {
-            try {
-                stmt.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            close();
         }
         return false;
     }
 
     @Override
     public boolean deleteMarket(String name) {
-        ConnectionFactory connector = new ConnectionFactory();
-        Connection connection = connector.getConnection();
-        PreparedStatement stmt = null;
+        getConnection();
         try {
             stmt = connection.prepareStatement("DELETE FROM market WHERE name = ?");
             stmt.setString(1, name);
@@ -131,12 +100,7 @@ public class MarketDaoImpl implements MarketDao {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }finally {
-            try {
-                stmt.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            close();
         }
         return false;
     }

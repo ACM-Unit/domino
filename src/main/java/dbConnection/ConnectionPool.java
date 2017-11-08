@@ -1,13 +1,4 @@
 package dbConnection;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.Properties;
-
-import javax.sql.DataSource;
 
 import org.apache.commons.dbcp.ConnectionFactory;
 import org.apache.commons.dbcp.DriverManagerConnectionFactory;
@@ -16,7 +7,14 @@ import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.impl.GenericObjectPool;
 import org.apache.log4j.Logger;
 
+import javax.sql.DataSource;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
 /**
+ * Class that describes a pool for storing a connection and issuing on demand
  * Created by Viacheslav Koshchii on 11/7/2017.
  */
 public class ConnectionPool {
@@ -26,9 +24,13 @@ public class ConnectionPool {
     private Logger LOGGER = Logger.getLogger(getClass());
     private static String JDBC_USER;
     private static String JDBC_PASS;
+    private static int POOL_SIZE = 5;
 
     private static GenericObjectPool gPool = null;
 
+    /**
+     * Constructor without parameters that create object of connection pool
+     */
     public ConnectionPool() {
         Properties props = new Properties();
         FileInputStream in = null;
@@ -51,11 +53,10 @@ public class ConnectionPool {
      * @return
      * @throws Exception
      */
-    @SuppressWarnings("unused")
     public DataSource setUpPool() throws Exception {
         Class.forName(JDBC_DRIVER);
         gPool = new GenericObjectPool();
-        gPool.setMaxActive(5);
+        gPool.setMaxActive(POOL_SIZE);
         ConnectionFactory cf = new DriverManagerConnectionFactory(JDBC_DB_URL, JDBC_USER, JDBC_PASS);
         PoolableConnectionFactory pcf = new PoolableConnectionFactory(cf, gPool, null, null, false, true);
         return new PoolingDataSource(gPool);
@@ -65,8 +66,10 @@ public class ConnectionPool {
         return gPool;
     }
 
-    // This Method Is Used To Print The Connection Pool Status
-    void printDbStatus() {
+    /**
+     * This Method Is Used To Print The Connection Pool Status
+     */
+    public void printDbStatus() {
         LOGGER.info("Max.: " + getConnectionPool().getMaxActive() + "; Active: " + getConnectionPool().getNumActive() + "; Idle: " + getConnectionPool().getNumIdle());
     }
 

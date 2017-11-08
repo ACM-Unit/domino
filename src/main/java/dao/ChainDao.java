@@ -1,12 +1,23 @@
 package dao;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import entity.Chain;
 
 /**
+ * Class for work with chains of dominoes from Database
  * Created by Viacheslav Koshchii on 11/6/2017.
  */
 public interface ChainDao {
+    /**
+     * get all chains of dominoes which have given name from Data Base
+     * @param name
+     * @return
+     */
     Chain getChainByName(String name);
-    boolean insertChain(Chain chain) throws MySQLIntegrityConstraintViolationException;
+
+    /**
+     * save chain of dominoes to Data Base
+     * @param chain
+     * @return
+     */
+    boolean insertChain(Chain chain);
 }

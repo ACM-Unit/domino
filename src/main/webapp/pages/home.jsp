@@ -34,6 +34,8 @@
     <span style="float: left; margin: 10px; display: none; background-color: white; width: 150px; height: 20px; cursor: pointer"
             id="showAll" onclick="show('All')">show all
     </span>
+    <input type="hidden" name="begin" value="1">
+    <input type="hidden" name="end" value="0">
     <span style="float: left; margin: 10px; display: none; background-color: white; width: 150px; height: 20px; cursor: pointer"
           id="clear" onclick="getClear()">clear</span>
     <input id="title" type="hidden" name="title" value="">
@@ -85,7 +87,7 @@
         var formData = $('#Domino');
         var regexpNum = new RegExp("^[2-9]$");
         var num = $('#num').val();
-        if(num!='' || regexpNum.test(num)) {
+        if(num!='' && (regexpNum.test(num) || (num>1 && num<28))) {
             $.ajax({
                 type: "GET",
                 url: '/get-domino?num=' + num,
@@ -105,7 +107,7 @@
                 }
             });
         }else{
-            alert('input number between 2 and 9');
+            alert('input number between 2 and 28');
         }
     }
 </script>

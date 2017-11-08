@@ -4,6 +4,8 @@ import entity.Market;
 import org.apache.log4j.Logger;
 import services.DominoService;
 import services.MarketService;
+import services.impl.DominoServiceImpl;
+import services.impl.MarketServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,15 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by Viacheslav Koshchii on 11/6/2017.
+ * Servlet that handles HTTP requests that come from the url: /save-chains
+ * Created by Viacheslav Koshchii on 07.11.2017.
  */
 public class SaveServlet  extends HttpServlet {
-    private DominoService service = new DominoService();
-    private MarketService marketService = new MarketService();
+    private DominoService service = new DominoServiceImpl();
+    private MarketService marketService = new MarketServiceImpl();
     private Logger LOGGER = Logger.getLogger(getClass());
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-        try {
             String title = request.getParameter("title");
             Market market = new Market(service.getByIds(request.getParameter("ids")), request.getParameter("chainName"));
             response.setContentType("text/plain");
@@ -38,9 +40,6 @@ public class SaveServlet  extends HttpServlet {
                 response.getWriter().write("Error, name already exists");
                 LOGGER.debug("user tried to inpute name which already exists");
             }
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
 
     }
 }

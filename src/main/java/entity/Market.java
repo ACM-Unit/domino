@@ -3,11 +3,14 @@ package entity;
 import org.apache.log4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 /**
+ * Class for work with sets of dominoes
  * Created by Viacheslav Koshchii on 03.11.2017.
  */
-public class Market {
+public class Market implements Callable<String> {
+    public static final int TIMEOUT=3;
     private String name;
     private List<Domino> market;
     private Set<List<Domino>> allChains = new HashSet<List<Domino>>();
@@ -28,7 +31,19 @@ public class Market {
         this.market = market;
     }
 
-    public Set<List<Domino>> getAllChains() {
+    public Set<List<Domino>> getAllChains() throws TimeoutException {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Future<String> future = executor.submit(this);
+        try {
+            future.get(TIMEOUT, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }finally {
+            executor.shutdown();
+        }
+
         return allChains;
     }
 
@@ -36,9 +51,18 @@ public class Market {
         this.allChains = allChains;
     }
 
-    public Market(List<Domino> market, String name) throws CloneNotSupportedException {
+    /**
+     * Constructor which create set of Dominoes and find all possible chains builds from this set
+     * @param market
+     * @param name
+     * @throws CloneNotSupportedException
+     */
+    public Market(List<Domino> market, String name) {
         this.market = market;
         this.name = name;
+    }
+    @Override
+    public String call() throws Exception {
         for(int i=0; i<market.size(); i++) {
             Domino domino = market.get(i).clone();
             List<Domino> next = new ArrayList<Domino>(market);
@@ -53,8 +77,14 @@ public class Market {
                 getAllChains(next, currentList1);
             }
         }
+        return "Ready!";
     }
-
+    /**
+     * Recursive method for find all possible chains builds from given set
+     * @param list
+     * @param currentList
+     * @throws CloneNotSupportedException
+     */
     private void getAllChains(List<Domino>list, List<Domino> currentList) throws CloneNotSupportedException {
         boolean stop = false;
         Domino current = currentList.get(currentList.size()-1);
@@ -75,9 +105,14 @@ public class Market {
             allChains.add(currentList);
         }
     }
-    public Set<List<Domino>> getLongestChains(){
+
+    /**
+     * method which find the longest from all possible chains
+     * @return
+     */
+    public Set<List<Domino>> getLongestChains() throws TimeoutException {
         int max = 0;
-        for (List<Domino> list: allChains) {
+        for (List<Domino> list: getAllChains()) {
             if(list.size()>max){
                 max = list.size();
             }
@@ -90,4 +125,16 @@ public class Market {
         }
         return set;
     }
+    public String AllChainsToString() throws TimeoutException {
+        Set<List<Domino>> list = getAllChains();
+        String chainStr = "";
+        for(List<Domino> chain: list){
+            for(Domino domino: chain){
+                chainStr += domino.getFirstNum()+":"+domino.getSecondNum()+", ";
+            }
+            chainStr = chainStr.substring(0, chainStr.length()-2)+";\n";
+        }
+        return chainStr.substring(0, chainStr.length()-1);
+    }
+
 }

@@ -4,12 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Class for work with chain of dominoes
  * Created by Viacheslav Koshchii on 06.11.2017.
  */
 public class Chain {
     private Market market;
     private Map<Integer, List<Domino>> chains;
-
     public Market getMarket() {
         return market;
     }

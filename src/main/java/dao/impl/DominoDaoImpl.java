@@ -1,12 +1,10 @@
 package dao.impl;
 
 import dao.DominoDao;
-import dbConnection.ConnectionFactory;
+import dbConnection.DbConnection;
 import entity.Domino;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,46 +12,34 @@ import java.util.List;
 /**
  * Created by Viacheslav Koshchii on 05.11.2017.
  */
-public class DominoDaoImpl implements DominoDao {
+public class DominoDaoImpl  extends DbConnection implements DominoDao {
 
 
     @Override
-    public List<Domino> getAllDominos() {
-        ConnectionFactory connector = new ConnectionFactory() ;
-        Connection connection = connector.getConnection();
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+    public List<Domino> getAllDominoes() {
+        getConnection();
         try {
             stmt = connection.prepareStatement("SELECT * FROM domino");
             rs = stmt.executeQuery();
-            List dominoset = new ArrayList();
+            List dominoeset = new ArrayList();
             while(rs.next())
             {
                 Domino domino = new Domino(rs.getInt("firstNum"), rs.getInt("secondNum"));
                 domino.setId( rs.getInt("id") );
-                dominoset.add(domino);
+                dominoeset.add(domino);
             }
-            return dominoset;
+            return dominoeset;
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                rs.close();
-                stmt.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            close();
         }
         return null;
     }
 
     @Override
-    public List<Domino> getDominosByIds(String idString) {
-        ConnectionFactory connector = new ConnectionFactory() ;
-        Connection connection = connector.getConnection();
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
+    public List<Domino> getDominoesByIds(String idString) {
+        getConnection();
         try {
             stmt = connection.prepareStatement("SELECT * FROM domino where id in ("+idString+")");
             rs = stmt.executeQuery();
@@ -68,22 +54,14 @@ public class DominoDaoImpl implements DominoDao {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            try {
-                rs.close();
-                stmt.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            close();
         }
         return null;
     }
 
     @Override
     public boolean insertDomino(Domino domino) {
-        ConnectionFactory connector = new ConnectionFactory() ;
-        Connection connection = connector.getConnection();
-        PreparedStatement stmt = null;
+        getConnection();
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO domino VALUES (NULL, ?, ?)");
             ps.setInt(1, domino.getFirstNum());
@@ -95,21 +73,14 @@ public class DominoDaoImpl implements DominoDao {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }finally {
-            try {
-                stmt.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            close();
         }
         return false;
     }
 
     @Override
     public boolean updateDomino(Domino domino) {
-        ConnectionFactory connector = new ConnectionFactory() ;
-        Connection connection = connector.getConnection();
-        PreparedStatement stmt = null;
+        getConnection();
         try {
             stmt = connection.prepareStatement("UPDATE domino SET firstNum=?, secondNum=? WHERE id=?");
             stmt.setInt(1, domino.getFirstNum());
@@ -122,21 +93,14 @@ public class DominoDaoImpl implements DominoDao {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }finally {
-            try {
-                stmt.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            close();
         }
         return false;
     }
 
     @Override
     public boolean deleteDomino(Domino domino) {
-        ConnectionFactory connector = new ConnectionFactory();
-        Connection connection = connector.getConnection();
-        PreparedStatement stmt = null;
+        getConnection();
         try {
             stmt = connection.prepareStatement("DELETE FROM domino WHERE id=" + domino.getId());
             int i = stmt.executeUpdate();
@@ -146,13 +110,9 @@ public class DominoDaoImpl implements DominoDao {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }finally {
-            try {
-                stmt.close();
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+           close();
         }
         return false;
     }
+
 }
