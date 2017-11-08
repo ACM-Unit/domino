@@ -21,7 +21,7 @@ public class ShowServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         Random r = new Random();
-        int num = r.nextInt((9 - 2) + 1)+2;
+        int num = r.nextInt((28 - 2) + 1)+2;
         List<Domino> dominoes = service.getRandom(num);
         request.setAttribute("showDomino", dominoes);
         String idString = "";

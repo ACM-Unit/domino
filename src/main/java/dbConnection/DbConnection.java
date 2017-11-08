@@ -36,14 +36,14 @@ public class DbConnection {
      */
     public void close() {
         try {
-            if (connection != null) {
-                connection.close();
+            if (rs != null) {
+                rs.close();
             }
             if (stmt != null) {
                 stmt.close();
             }
-            if (rs != null) {
-                rs.close();
+            if (connection != null) {
+                connection.close();
             }
 
         } catch (SQLException e) {
