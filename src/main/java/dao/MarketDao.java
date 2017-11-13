@@ -4,6 +4,7 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 import entity.Market;
 
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Class for work with sets of domino from Database
@@ -29,7 +30,7 @@ public interface MarketDao {
      * @return
      * @throws MySQLIntegrityConstraintViolationException
      */
-    boolean insertMarket(Market market) throws MySQLIntegrityConstraintViolationException;
+    boolean insertMarket(Market market) throws MySQLIntegrityConstraintViolationException, TimeoutException;
     /**
      * method for delete set of domino into database
      * @param name

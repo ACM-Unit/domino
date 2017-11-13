@@ -37,16 +37,6 @@ public class MarketServiceImpl implements MarketService {
     public boolean saveMarketAndAllChains(Market market) {
         try {
             dao.insertMarket(market);
-            Chain chain = new Chain();
-            Map<Integer, List<Domino>> map = new HashMap<>();
-            chain.setMarket(market);
-            List<List<Domino>> list = new ArrayList<>();
-            list.addAll(market.getAllChains());
-            for (int i=0; i<list.size(); i++){
-                map.put(i, list.get(i));
-            }
-            chain.setChains(map);
-            chainDao.insertChain(chain);
         } catch (MySQLIntegrityConstraintViolationException e) {
             return false;
         } catch (TimeoutException e) {
@@ -59,16 +49,6 @@ public class MarketServiceImpl implements MarketService {
 
         try {
             dao.insertMarket(market);
-            Chain chain = new Chain();
-            Map<Integer, List<Domino>> map = new HashMap<>();
-            chain.setMarket(market);
-            List<List<Domino>> list = new ArrayList<>();
-            list.addAll(market.getLongestChains());
-            for (int i=0; i<list.size(); i++){
-                map.put(i, list.get(i));
-            }
-            chain.setChains(map);
-            chainDao.insertChain(chain);
         } catch (MySQLIntegrityConstraintViolationException e) {
             return false;
         } catch (TimeoutException e) {

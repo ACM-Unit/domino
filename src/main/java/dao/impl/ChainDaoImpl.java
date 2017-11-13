@@ -54,29 +54,5 @@ public class ChainDaoImpl extends DbConnection implements ChainDao {
         return chain;
     }
 
-    @Override
-    public boolean insertChain(Chain chain) {
-        getConnection();
-        Map<Integer, List<Domino>> map = chain.getChains();
-        try {
-            String query = "";
-            for (int n : map.keySet()) {
-                List<Domino> list = map.get(n);
-                for (Domino domino : list) {
-                    query += "select null, " + n + ", '" + chain.getMarket().getName() + "', " + domino.getFirstNum() + ", " + domino.getSecondNum() + " from dual union all ";
-                }
-            }
-            query = query.substring(0, query.length() - 11);
-            LOGGER.info(query);
-            stmt = connection.prepareStatement("INSERT INTO `domino`.`chain` " + query);
-            stmt.executeUpdate();
-        } catch (SQLException ex) {
-            return false;
-        } finally {
-            close();
-        }
-        return true;
-    }
-
 
 }

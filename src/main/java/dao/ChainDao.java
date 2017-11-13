@@ -13,11 +13,4 @@ public interface ChainDao {
      * @return
      */
     Chain getChainByName(String name);
-
-    /**
-     * save chain of dominoes to Data Base
-     * @param chain
-     * @return
-     */
-    boolean insertChain(Chain chain);
 }
