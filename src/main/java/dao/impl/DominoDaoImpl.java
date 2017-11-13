@@ -3,6 +3,7 @@ package dao.impl;
 import dao.DominoDao;
 import dbConnection.DbConnection;
 import entity.Domino;
+import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ import java.util.List;
  * Created by Viacheslav Koshchii on 05.11.2017.
  */
 public class DominoDaoImpl  extends DbConnection implements DominoDao {
-
+    private Logger LOGGER = Logger.getLogger(getClass());
 
     @Override
     public List<Domino> getAllDominoes() {
@@ -52,7 +53,7 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
             }
             return list;
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            LOGGER.error("SQL exception while getting domino by id");
         } finally {
             close();
         }
@@ -71,7 +72,7 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
                 return true;
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            LOGGER.error("SQL exception while inserting domino");
         }finally {
             close();
         }
@@ -91,7 +92,7 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
                 return true;
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            LOGGER.error("SQL exception while updating domino");
         }finally {
             close();
         }
@@ -108,7 +109,7 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
                 return true;
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            LOGGER.error("SQL exception while deleting domino");
         }finally {
            close();
         }

@@ -47,7 +47,7 @@ public class ChainDaoImpl extends DbConnection implements ChainDao {
             chain.setMarket(dao.getMarketByName(name));
             chain.setChains(map);
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            LOGGER.error("SQL exception while getting chain by name");
         } finally {
             close();
         }

@@ -3,6 +3,8 @@ set /p user="enter your database username: "
 set /p password="enter your database password: "
 @echo user = %user%>src/main/resources/database.properties
 @echo password = %password%>>src/main/resources/database.properties
+@echo driver = com.mysql.jdbc.Driver>>src/main/resources/database.properties
+@echo url = jdbc:mysql://localhost:3306/domino>>src/main/resources/database.properties
 @echo off
 :getConfirmation
 set /p confirmTest=Continue in test mode [y/n] ?:

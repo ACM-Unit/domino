@@ -37,9 +37,9 @@ public class Market implements Callable<String> {
         try {
             future.get(TIMEOUT, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.error("Error while execute in thread");
         } catch (ExecutionException e) {
-            e.printStackTrace();
+            LOGGER.error("Error while execute");
         }finally {
             executor.shutdown();
         }

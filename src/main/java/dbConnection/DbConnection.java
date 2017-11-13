@@ -1,5 +1,7 @@
 package dbConnection;
 
+import org.apache.log4j.Logger;
+
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,6 +16,7 @@ public class DbConnection {
      * Get a connection to database
      * @return Connection object
      */
+    private Logger LOGGER = Logger.getLogger(getClass());
     public Connection connection = null;
     public PreparedStatement stmt = null;
     public ResultSet rs = null;
@@ -23,9 +26,9 @@ public class DbConnection {
             DataSource dataSource = jdbcObj.setUpPool();
             connection = dataSource.getConnection();
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("SQL exception while creation pool");
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Error while creation pool");
         }
         jdbcObj.printDbStatus();
         return connection;
@@ -47,7 +50,7 @@ public class DbConnection {
             }
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.error("SQL exception while close connection");
         }
     }
 }

@@ -32,7 +32,7 @@ public class testDomino {
                     "4:1, 1:2;"));
         } catch (TimeoutException e) {
             System.out.println("terminated");
-            e.printStackTrace();
+            LOGGER.error();
         }
     }
 

@@ -8,6 +8,7 @@ import dao.impl.MarketDaoImpl;
 import entity.Chain;
 import entity.Domino;
 import entity.Market;
+import org.apache.log4j.Logger;
 import services.MarketService;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeoutException;
  * Created by Viacheslav Koshchii on 06.11.2017.
  */
 public class MarketServiceImpl implements MarketService {
+    private Logger LOGGER = Logger.getLogger(getClass());
     private MarketDao dao = new MarketDaoImpl();
     private ChainDao chainDao = new ChainDaoImpl();
 
@@ -48,7 +50,7 @@ public class MarketServiceImpl implements MarketService {
         } catch (MySQLIntegrityConstraintViolationException e) {
             return false;
         } catch (TimeoutException e) {
-            e.printStackTrace();
+            LOGGER.error("Time out");
         }
         return true;
     }
@@ -70,7 +72,7 @@ public class MarketServiceImpl implements MarketService {
         } catch (MySQLIntegrityConstraintViolationException e) {
             return false;
         } catch (TimeoutException e) {
-            e.printStackTrace();
+            LOGGER.error("Time out");
         }
         return true;
     }

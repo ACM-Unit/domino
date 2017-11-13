@@ -19,8 +19,8 @@ import java.util.Properties;
  */
 public class ConnectionPool {
 
-    private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String JDBC_DB_URL = "jdbc:mysql://localhost:3306/domino";
+    private static String JDBC_DRIVER;
+    private static String JDBC_DB_URL;
     private Logger LOGGER = Logger.getLogger(getClass());
     private static String JDBC_USER;
     private static String JDBC_PASS;
@@ -41,10 +41,12 @@ public class ConnectionPool {
             in.close();
             JDBC_USER = props.getProperty("user");
             JDBC_PASS = props.getProperty("password");
+            JDBC_DRIVER = props.getProperty("driver");
+            JDBC_DB_URL = props.getProperty("url");
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            LOGGER.error("File with properties not found");
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("could not get data from properties file");
         }
     }
 

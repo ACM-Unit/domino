@@ -28,7 +28,7 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
                 names.add(rs.getString("name"));
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            LOGGER.error("SQL exception while getting all markets");
         } finally {
             close();
         }
@@ -52,7 +52,7 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
 
             market = new Market(list, name);
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            LOGGER.error("SQL exception while getting market by name");
         } finally {
             close();
         }
@@ -80,7 +80,7 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
         } catch (MySQLIntegrityConstraintViolationException e2){
             throw new MySQLIntegrityConstraintViolationException();
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            LOGGER.error("SQL exception while inserting market");
         }finally {
             close();
         }
@@ -98,7 +98,7 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
                 return true;
             }
         } catch (SQLException ex) {
-            ex.printStackTrace();
+            LOGGER.error("SQL exception while deleting market");
         }finally {
             close();
         }
