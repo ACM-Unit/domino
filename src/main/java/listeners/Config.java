@@ -25,16 +25,16 @@ public class Config implements ServletContextListener {
     private ChainService chainService;
     private DominoService dominoService;
     private MarketService marketService;
+    private  ConnectionPool jdbcObj;
     @Override
     public void contextInitialized(ServletContextEvent event) {
         ServletContext servletContext = event.getServletContext();
-        ConnectionPool jdbcObj = new ConnectionPool();
+        jdbcObj = new ConnectionPool();
         try {
             dataSource = jdbcObj.setUpPool();
             chainService = new ChainServiceImpl(dataSource);
             dominoService = new DominoServiceImpl(dataSource);
             marketService = new MarketServiceImpl(dataSource);
-            System.out.println("good");
         } catch (SQLException e) {
             LOGGER.error("SQL exception while creation pool");
         } catch (Exception e) {
@@ -46,7 +46,11 @@ public class Config implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent servletContextEvent) {
-
+        try {
+            jdbcObj.close();
+        } catch (Exception e) {
+            LOGGER.error("exception while trying close connection pool");
+        }
     }
 
     public DataSource getDataSource() {

@@ -52,6 +52,7 @@ public class ConnectionPool {
 
     /**
      * get DataSource from Connection pool
+     *
      * @return
      * @throws Exception
      */
@@ -75,4 +76,7 @@ public class ConnectionPool {
         LOGGER.info("Max.: " + getConnectionPool().getMaxActive() + "; Active: " + getConnectionPool().getNumActive() + "; Idle: " + getConnectionPool().getNumIdle());
     }
 
+    public void close() throws Exception {
+        gPool.close();
+    }
 }
