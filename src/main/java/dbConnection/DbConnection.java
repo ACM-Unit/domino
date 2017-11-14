@@ -12,25 +12,17 @@ import java.sql.SQLException;
  * Class which contain common methods for dao classes and get connection from connection pool
  */
 public class DbConnection {
+
     /**
      * Get a connection to database
      * @return Connection object
      */
+
     private Logger LOGGER = Logger.getLogger(getClass());
-    public Connection connection = null;
+    public Connection connection;
     public PreparedStatement stmt = null;
     public ResultSet rs = null;
     public Connection getConnection() {
-        ConnectionPool jdbcObj = new ConnectionPool();
-        try {
-            DataSource dataSource = jdbcObj.setUpPool();
-            connection = dataSource.getConnection();
-        } catch (SQLException e) {
-            LOGGER.error("SQL exception while creation pool");
-        } catch (Exception e) {
-            LOGGER.error("Error while creation pool");
-        }
-        jdbcObj.printDbStatus();
         return connection;
     }
 
@@ -44,9 +36,6 @@ public class DbConnection {
             }
             if (stmt != null) {
                 stmt.close();
-            }
-            if (connection != null) {
-                connection.close();
             }
 
         } catch (SQLException e) {

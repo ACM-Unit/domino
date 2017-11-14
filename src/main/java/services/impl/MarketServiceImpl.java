@@ -11,6 +11,8 @@ import entity.Market;
 import org.apache.log4j.Logger;
 import services.MarketService;
 
+import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,9 +23,11 @@ import java.util.concurrent.TimeoutException;
  * Created by Viacheslav Koshchii on 06.11.2017.
  */
 public class MarketServiceImpl implements MarketService {
+    public MarketServiceImpl(DataSource dataSource) throws SQLException {
+        dao = new MarketDaoImpl(dataSource);
+    }
     private Logger LOGGER = Logger.getLogger(getClass());
-    private MarketDao dao = new MarketDaoImpl();
-    private ChainDao chainDao = new ChainDaoImpl();
+    private MarketDao dao;
 
     public List<String> getAllNames() {
         return dao.getAllMarketNames();

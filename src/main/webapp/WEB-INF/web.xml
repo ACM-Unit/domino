@@ -5,6 +5,12 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
         metadata-complete="false"
         version="3.0">
+    <!--listeners-->
+    <listener>
+        <listener-class>
+            listeners.Config
+        </listener-class>
+    </listener>
     <servlet>
         <servlet-name>domino</servlet-name>
         <servlet-class>controllers.DominoServlet</servlet-class>
@@ -47,7 +53,7 @@
     </servlet-mapping>
     <servlet>
         <servlet-name>main</servlet-name>
-        <servlet-class>controllers.MainServlet</servlet-class>
+        <servlet-class>controllers.HomeServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>main</servlet-name>

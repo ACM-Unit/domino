@@ -8,6 +8,7 @@ import entity.Domino;
 import entity.Market;
 import org.apache.log4j.Logger;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,10 @@ import java.util.concurrent.TimeoutException;
  */
 public class MarketDaoImpl extends DbConnection implements MarketDao {
     private Logger LOGGER = Logger.getLogger(getClass());
+
+    public MarketDaoImpl(DataSource dataSource) throws SQLException {
+        this.connection = dataSource.getConnection();
+    }
 
     @Override
     public List<String> getAllMarketNames() {
@@ -75,12 +80,12 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
             map.put(i, list.get(i));
         }
         chain.setChains(map);
-        String idString = "";
+        StringBuilder idString = new StringBuilder("");
         for (int i = 0; i < market.getMarket().size(); i++) {
             if (i == market.getMarket().size() - 1) {
-                idString += market.getMarket().get(i).getId();
+                idString.append(market.getMarket().get(i).getId());
             } else {
-                idString += market.getMarket().get(i).getId() + ",";
+                idString.append(market.getMarket().get(i).getId()).append(",");
             }
         }
         getConnection();
@@ -89,15 +94,14 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
             stmt = connection.prepareStatement("INSERT INTO `domino`.`market` SELECT '" + market.getName() + "', id FROM domino where id in (" + idString + ")");
             int i = stmt.executeUpdate();
             Map<Integer, List<Domino>> map1 = chain.getChains();
-            String query = "";
+            StringBuilder query = new StringBuilder("");
             for (int n : map.keySet()) {
                 List<Domino> list1 = map1.get(n);
                 for (Domino domino : list1) {
-                    query += "select null, " + n + ", '" + chain.getMarket().getName() + "', " + domino.getFirstNum() + ", " + domino.getSecondNum() + " from dual union all ";
+                    query.append("select null, ").append(n).append(", '").append(chain.getMarket().getName()).append("', ").append(domino.getFirstNum()).append(", ").append(domino.getSecondNum()).append(" from dual union all ");
                 }
             }
-            query = query.substring(0, query.length() - 11);
-            stmt = connection.prepareStatement("INSERT INTO `domino`.`chain` " + query);
+            stmt = connection.prepareStatement("INSERT INTO `domino`.`chain` " + query.substring(0, query.length() - 11));
             stmt.executeUpdate();
             connection.commit();
             if (i == 1) {

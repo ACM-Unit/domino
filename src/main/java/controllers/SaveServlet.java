@@ -1,6 +1,7 @@
 package controllers;
 
 import entity.Market;
+import listeners.Config;
 import org.apache.log4j.Logger;
 import services.DominoService;
 import services.MarketService;
@@ -17,14 +18,12 @@ import java.io.IOException;
  * Servlet that handles HTTP requests that come from the url: /save-chains
  * Created by Viacheslav Koshchii on 07.11.2017.
  */
-public class SaveServlet  extends HttpServlet {
-    private DominoService service = new DominoServiceImpl();
-    private MarketService marketService = new MarketServiceImpl();
+public class SaveServlet  extends MainServlet {
     private Logger LOGGER = Logger.getLogger(getClass());
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
             String title = request.getParameter("title");
-            Market market = new Market(service.getByIds(request.getParameter("ids")), request.getParameter("chainName"));
+            Market market = new Market(dominoService.getByIds(request.getParameter("ids")), request.getParameter("chainName"));
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");
             boolean status = false;
@@ -42,4 +41,5 @@ public class SaveServlet  extends HttpServlet {
             }
 
     }
+
 }

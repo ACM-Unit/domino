@@ -5,6 +5,7 @@ import dbConnection.DbConnection;
 import entity.Domino;
 import org.apache.log4j.Logger;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,6 +16,10 @@ import java.util.List;
  */
 public class DominoDaoImpl  extends DbConnection implements DominoDao {
     private Logger LOGGER = Logger.getLogger(getClass());
+
+    public DominoDaoImpl(DataSource dataSource) throws SQLException {
+        this.connection = dataSource.getConnection();
+    }
 
     @Override
     public List<Domino> getAllDominoes() {

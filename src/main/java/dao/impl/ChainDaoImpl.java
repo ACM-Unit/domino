@@ -7,6 +7,7 @@ import entity.Chain;
 import entity.Domino;
 import org.apache.log4j.Logger;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -19,10 +20,14 @@ import java.util.Map;
  */
 public class ChainDaoImpl extends DbConnection implements ChainDao {
     private Logger LOGGER = Logger.getLogger(getClass());
+    private MarketDao dao;
+    public ChainDaoImpl(DataSource dataSource) throws SQLException {
+        this.connection = dataSource.getConnection();
+        dao = new MarketDaoImpl(dataSource);
+    }
 
     @Override
     public Chain getChainByName(String name) {
-        MarketDao dao = new MarketDaoImpl();
         getConnection();
         Chain chain = new Chain();
         Map<Integer, List<Domino>> map = new LinkedHashMap<>();

@@ -5,6 +5,8 @@ import dao.impl.DominoDaoImpl;
 import entity.Domino;
 import services.DominoService;
 
+import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -13,7 +15,11 @@ import java.util.Random;
  * Created by Viacheslav Koshchii on 05.11.2017.
  */
 public class DominoServiceImpl implements DominoService{
-    private DominoDao dao = new DominoDaoImpl();
+
+    public DominoServiceImpl(DataSource dataSource) throws SQLException {
+        dao = new DominoDaoImpl(dataSource);
+    }
+    private DominoDao dao;
 
     public List<Domino> getAll() {
         return dao.getAllDominoes();

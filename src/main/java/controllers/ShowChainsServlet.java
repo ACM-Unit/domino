@@ -3,6 +3,7 @@ package controllers;
 import entity.Chain;
 import entity.Domino;
 import entity.Market;
+import listeners.Config;
 import org.apache.log4j.Logger;
 import services.ChainService;
 import services.DominoService;
@@ -23,11 +24,10 @@ import java.util.List;
  * Servlet that handles HTTP requests that come from the url: /get-market
  * Created by Viacheslav Koshchii on 07.11.2017.
  */
-public class ShowChainsServlet extends HttpServlet {
-    private DominoService service = new DominoServiceImpl();
-    private MarketService marketService = new MarketServiceImpl();
-    private ChainService chainService = new ChainServiceImpl();
+public class ShowChainsServlet extends MainServlet {
+
     private Logger LOGGER = Logger.getLogger(getClass());
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         int begin = Integer.parseInt(request.getParameter("begin"));
@@ -60,7 +60,7 @@ public class ShowChainsServlet extends HttpServlet {
                 }
             }
         }else{
-            List<Domino> dominoes = service.getByIds(idString);
+            List<Domino> dominoes = dominoService.getByIds(idString);
             request.setAttribute("showDomino", dominoes);
             Market market = null;
             market = new Market(dominoes, "");
@@ -88,6 +88,7 @@ public class ShowChainsServlet extends HttpServlet {
         request.setAttribute("markets", list);
         request.getRequestDispatcher("/pages/showMarket.jsp").forward(request,response);
     }
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("names", marketService.getAllNames());
         request.setAttribute("title", "All");

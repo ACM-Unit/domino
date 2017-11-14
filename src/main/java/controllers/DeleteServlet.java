@@ -1,5 +1,6 @@
 package controllers;
 
+import listeners.Config;
 import org.apache.log4j.Logger;
 import services.MarketService;
 import services.impl.MarketServiceImpl;
@@ -14,8 +15,7 @@ import java.io.IOException;
  * Servlet that handles HTTP requests that come from the url: /delete-chains
  * Created by Viacheslav Koshchii on 07.11.2017.
  */
-public class DeleteServlet extends HttpServlet {
-    private MarketService marketService = new MarketServiceImpl();
+public class DeleteServlet extends MainServlet {
     private Logger LOGGER = Logger.getLogger(getClass());
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

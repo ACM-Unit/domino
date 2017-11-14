@@ -1,9 +1,12 @@
+import listeners.Config;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.nio.NetworkTrafficSelectChannelConnector;
 import org.eclipse.jetty.webapp.WebAppContext;
+
+import javax.servlet.ServletContextListener;
 
 public class Launcher
 {
@@ -14,9 +17,10 @@ public class Launcher
         NetworkTrafficSelectChannelConnector connector = new NetworkTrafficSelectChannelConnector(server);
         connector.setPort(8081);
         connector.setReuseAddress(true);
-
+        ServletContextListener listener = new Config();
         server.setConnectors(new Connector[]{connector});
         WebAppContext webAppContext = new WebAppContext();
+        webAppContext.addEventListener(listener);
         webAppContext.setContextPath("/");
         webAppContext.setResourceBase(Thread.currentThread().getContextClassLoader().getResource("").toExternalForm());
 
