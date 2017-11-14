@@ -21,17 +21,18 @@ import java.util.Map;
 public class ChainDaoImpl extends DbConnection implements ChainDao {
     private Logger LOGGER = Logger.getLogger(getClass());
     private MarketDao dao;
+    private DataSource dataSource;
     public ChainDaoImpl(DataSource dataSource) throws SQLException {
-        this.connection = dataSource.getConnection();
+        this.dataSource = dataSource;
         dao = new MarketDaoImpl(dataSource);
     }
 
     @Override
     public Chain getChainByName(String name) {
-        getConnection();
         Chain chain = new Chain();
         Map<Integer, List<Domino>> map = new LinkedHashMap<>();
         try {
+            connection = dataSource.getConnection();
             stmt = connection.prepareStatement("SELECT * FROM chain where marketname = ?");
             stmt.setString(1, name);
             rs = stmt.executeQuery();

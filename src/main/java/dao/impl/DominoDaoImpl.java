@@ -16,15 +16,15 @@ import java.util.List;
  */
 public class DominoDaoImpl  extends DbConnection implements DominoDao {
     private Logger LOGGER = Logger.getLogger(getClass());
-
+    private DataSource dataSource;
     public DominoDaoImpl(DataSource dataSource) throws SQLException {
-        this.connection = dataSource.getConnection();
+        this.dataSource = dataSource;
     }
 
     @Override
     public List<Domino> getAllDominoes() {
-        getConnection();
         try {
+            connection = dataSource.getConnection();
             stmt = connection.prepareStatement("SELECT * FROM domino");
             rs = stmt.executeQuery();
             List dominoeset = new ArrayList();
@@ -45,8 +45,8 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
 
     @Override
     public List<Domino> getDominoesByIds(String idString) {
-        getConnection();
         try {
+            connection = dataSource.getConnection();
             stmt = connection.prepareStatement("SELECT * FROM domino where id in ("+idString+")");
             rs = stmt.executeQuery();
             List list = new ArrayList();
@@ -67,8 +67,8 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
 
     @Override
     public boolean insertDomino(Domino domino) {
-        getConnection();
         try {
+            connection = dataSource.getConnection();
             PreparedStatement ps = connection.prepareStatement("INSERT INTO domino VALUES (NULL, ?, ?)");
             ps.setInt(1, domino.getFirstNum());
             ps.setInt(2, domino.getSecondNum());
@@ -86,8 +86,8 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
 
     @Override
     public boolean updateDomino(Domino domino) {
-        getConnection();
         try {
+            connection = dataSource.getConnection();
             stmt = connection.prepareStatement("UPDATE domino SET firstNum=?, secondNum=? WHERE id=?");
             stmt.setInt(1, domino.getFirstNum());
             stmt.setInt(2, domino.getSecondNum());
@@ -106,8 +106,8 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
 
     @Override
     public boolean deleteDomino(Domino domino) {
-        getConnection();
         try {
+            connection = dataSource.getConnection();
             stmt = connection.prepareStatement("DELETE FROM domino WHERE id=" + domino.getId());
             int i = stmt.executeUpdate();
             if(i == 1) {

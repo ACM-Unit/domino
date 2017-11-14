@@ -1,12 +1,8 @@
 package controllers;
 
 import entity.Domino;
-import listeners.Config;
-import services.DominoService;
-import services.impl.DominoServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,6 +20,7 @@ public class ShowServlet extends MainServlet {
         Random r = new Random();
         int num = r.nextInt((28 - 2) + 1)+2;
         List<Domino> dominoes = dominoService.getRandom(num);
+        context.getJdbcObj().printDbStatus();
         request.setAttribute("showDomino", dominoes);
         String idString = "";
         for(int i=0; i<dominoes.size(); i++){
@@ -43,6 +40,7 @@ public class ShowServlet extends MainServlet {
             response.sendRedirect("/start-game");
         }
         List<Domino> dominoes = dominoService.getRandom(Integer.parseInt(request.getParameter("num")));
+        context.getJdbcObj().printDbStatus();
         request.setAttribute("showDomino", dominoes);
         String idString = "";
         for(int i=0; i<dominoes.size(); i++){

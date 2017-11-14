@@ -3,17 +3,9 @@ package controllers;
 import entity.Chain;
 import entity.Domino;
 import entity.Market;
-import listeners.Config;
 import org.apache.log4j.Logger;
-import services.ChainService;
-import services.DominoService;
-import services.MarketService;
-import services.impl.ChainServiceImpl;
-import services.impl.DominoServiceImpl;
-import services.impl.MarketServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -40,6 +32,7 @@ public class ShowChainsServlet extends MainServlet {
         request.setAttribute("begin", begin);
         request.setAttribute("end", end);
         request.setAttribute("names", marketService.getAllNames());
+        context.getJdbcObj().printDbStatus();
         String name = request.getParameter("marketname");
         String idString = request.getParameter("ids");
         String title = request.getParameter("title");
@@ -49,6 +42,7 @@ public class ShowChainsServlet extends MainServlet {
         if(!name.equals("-")) {
             Chain markets = chainService.getChainsByName(name);
             Market m = marketService.getMarketByName(name);
+            context.getJdbcObj().printDbStatus();
             list.addAll(markets.getChains().values());
             idString="";
             saved = true;
@@ -61,6 +55,7 @@ public class ShowChainsServlet extends MainServlet {
             }
         }else{
             List<Domino> dominoes = dominoService.getByIds(idString);
+            context.getJdbcObj().printDbStatus();
             request.setAttribute("showDomino", dominoes);
             Market market = null;
             market = new Market(dominoes, "");
@@ -91,6 +86,7 @@ public class ShowChainsServlet extends MainServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("names", marketService.getAllNames());
+        context.getJdbcObj().printDbStatus();
         request.setAttribute("title", "All");
         request.setAttribute("marketSize", 0);
         request.setAttribute("ids", "0");

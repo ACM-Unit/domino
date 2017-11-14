@@ -2,7 +2,6 @@ package dbConnection;
 
 import org.apache.log4j.Logger;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -37,7 +36,9 @@ public class DbConnection {
             if (stmt != null) {
                 stmt.close();
             }
-
+            if (connection != null) {
+                connection.close();
+            }
         } catch (SQLException e) {
             LOGGER.error("SQL exception while close connection");
         }

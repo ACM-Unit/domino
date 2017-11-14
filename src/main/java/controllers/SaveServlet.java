@@ -1,15 +1,9 @@
 package controllers;
 
 import entity.Market;
-import listeners.Config;
 import org.apache.log4j.Logger;
-import services.DominoService;
-import services.MarketService;
-import services.impl.DominoServiceImpl;
-import services.impl.MarketServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,13 +18,16 @@ public class SaveServlet  extends MainServlet {
     {
             String title = request.getParameter("title");
             Market market = new Market(dominoService.getByIds(request.getParameter("ids")), request.getParameter("chainName"));
+             context.getJdbcObj().printDbStatus();
             response.setContentType("text/plain");
             response.setCharacterEncoding("UTF-8");
             boolean status = false;
             if(title.equals("All")){
                 status = marketService.saveMarketAndAllChains(market);
+                context.getJdbcObj().printDbStatus();
             }else if(title.equals("Longest")) {
                 status = marketService.saveMarketAndLongestChains(market);
+                context.getJdbcObj().printDbStatus();
             }
             if(status){
                 response.getWriter().write(request.getParameter("chainName"));

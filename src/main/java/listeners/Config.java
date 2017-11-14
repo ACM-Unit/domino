@@ -84,4 +84,8 @@ public class Config implements ServletContextListener {
     public static Config getInstance(ServletContext servletContext) {
         return (Config) servletContext.getAttribute(ATTRIBUTE_NAME);
     }
+
+    public ConnectionPool getJdbcObj() {
+        return jdbcObj;
+    }
 }

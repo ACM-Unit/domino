@@ -21,16 +21,16 @@ import java.util.concurrent.TimeoutException;
  */
 public class MarketDaoImpl extends DbConnection implements MarketDao {
     private Logger LOGGER = Logger.getLogger(getClass());
-
+    private DataSource dataSource;
     public MarketDaoImpl(DataSource dataSource) throws SQLException {
-        this.connection = dataSource.getConnection();
+        this.dataSource = dataSource;
     }
 
     @Override
     public List<String> getAllMarketNames() {
-        getConnection();
         List<String> names = null;
         try {
+            connection = dataSource.getConnection();
             stmt = connection.prepareStatement("SELECT distinct name FROM market");
             rs = stmt.executeQuery();
             names = new ArrayList<>();
@@ -47,9 +47,9 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
 
     @Override
     public Market getMarketByName(String name) {
-        getConnection();
         Market market = null;
         try {
+            connection = dataSource.getConnection();
             stmt = connection.prepareStatement("SELECT * FROM domino d, market m where d.id = m.domino  and m.name = ?");
             stmt.setString(1, name);
             rs = stmt.executeQuery();
@@ -88,8 +88,8 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
                 idString.append(market.getMarket().get(i).getId()).append(",");
             }
         }
-        getConnection();
         try {
+            connection = dataSource.getConnection();
             connection.setAutoCommit(false);
             stmt = connection.prepareStatement("INSERT INTO `domino`.`market` SELECT '" + market.getName() + "', id FROM domino where id in (" + idString + ")");
             int i = stmt.executeUpdate();
@@ -129,8 +129,8 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
 
     @Override
     public boolean deleteMarket(String name) {
-        getConnection();
         try {
+            connection = dataSource.getConnection();
             stmt = connection.prepareStatement("DELETE FROM market WHERE name = ?");
             stmt.setString(1, name);
             int i = stmt.executeUpdate();

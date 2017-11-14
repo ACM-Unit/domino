@@ -1,12 +1,8 @@
 package controllers;
 
-import listeners.Config;
 import org.apache.log4j.Logger;
-import services.MarketService;
-import services.impl.MarketServiceImpl;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,6 +18,7 @@ public class DeleteServlet extends MainServlet {
     {
         String name = request.getParameter("market");
         marketService.delete(name);
+        context.getJdbcObj().printDbStatus();
         LOGGER.info("deleted chain with name - "+ name);
     }
 }
