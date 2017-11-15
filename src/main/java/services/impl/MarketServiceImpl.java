@@ -38,9 +38,9 @@ public class MarketServiceImpl implements MarketService {
         return dao.getMarketByName(name);
     }
 
-    public boolean saveMarketAndAllChains(Market market) {
+    public boolean saveMarketAndChains(Market market, String label) {
         try {
-            dao.insertMarket(market);
+            dao.insertMarket(market, label);
         } catch (MySQLIntegrityConstraintViolationException e) {
             return false;
         } catch (TimeoutException e) {
@@ -49,17 +49,6 @@ public class MarketServiceImpl implements MarketService {
         return true;
     }
 
-    public boolean saveMarketAndLongestChains(Market market){
-
-        try {
-            dao.insertMarket(market);
-        } catch (MySQLIntegrityConstraintViolationException e) {
-            return false;
-        } catch (TimeoutException e) {
-            LOGGER.error("Time out");
-        }
-        return true;
-    }
     public void delete(String name){
         dao.deleteMarket(name);
     }

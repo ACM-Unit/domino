@@ -34,39 +34,39 @@ public class ShowChainsServlet extends MainServlet {
         request.setAttribute("names", marketService.getAllNames());
         context.getJdbcObj().printDbStatus();
         String name = request.getParameter("marketname");
-        String idString = request.getParameter("ids");
+        StringBuilder idString = new StringBuilder(request.getParameter("ids"));
         String title = request.getParameter("title");
         boolean timeout = false;
         boolean saved = false;
         List<List<Domino>> list = new ArrayList<>();
-        if(!name.equals("-")) {
+        if(!"-".equals(name)) {
             Chain markets = chainService.getChainsByName(name);
             Market m = marketService.getMarketByName(name);
             context.getJdbcObj().printDbStatus();
             list.addAll(markets.getChains().values());
-            idString="";
+            idString=new StringBuilder("");
             saved = true;
             for(int i=0; i<m.getMarket().size(); i++){
                 if(i==m.getMarket().size()-1){
-                    idString +=m.getMarket().get(i).getId();
+                    idString.append(m.getMarket().get(i).getId());
                 }else{
-                    idString+=m.getMarket().get(i).getId()+",";
+                    idString.append(m.getMarket().get(i).getId()).append(",");
                 }
             }
         }else{
-            List<Domino> dominoes = dominoService.getByIds(idString);
+            List<Domino> dominoes = dominoService.getByIds(idString.toString());
             context.getJdbcObj().printDbStatus();
             request.setAttribute("showDomino", dominoes);
             Market market = null;
             market = new Market(dominoes, "");
-            if(title.equals("All")) {
+            if("All".equals(title)) {
                 try {
                     list.addAll(market.getAllChains());
                 } catch (Exception e) {
                     LOGGER.info("user requested too much data");
                     timeout=true;
                 }
-            }else if(title.equals("Longest")){
+            }else if("Longest".equals(title)){
                 try {
                     list.addAll(market.getLongestChains());
                 } catch (Exception e) {

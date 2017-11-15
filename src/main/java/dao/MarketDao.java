@@ -30,7 +30,7 @@ public interface MarketDao {
      * @return
      * @throws MySQLIntegrityConstraintViolationException
      */
-    boolean insertMarket(Market market) throws MySQLIntegrityConstraintViolationException, TimeoutException;
+    boolean insertMarket(Market market, String label) throws MySQLIntegrityConstraintViolationException, TimeoutException;
     /**
      * method for delete set of domino into database
      * @param name

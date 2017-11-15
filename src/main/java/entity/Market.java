@@ -127,12 +127,12 @@ public class Market implements Callable<String> {
     }
     public String AllChainsToString() throws TimeoutException {
         Set<List<Domino>> list = getAllChains();
-        String chainStr = "";
+        StringBuilder chainStr = new StringBuilder("");
         for(List<Domino> chain: list){
             for(Domino domino: chain){
-                chainStr += domino.getFirstNum()+":"+domino.getSecondNum()+", ";
+                chainStr.append(domino.getFirstNum()).append(":").append(domino.getSecondNum()).append(", ");
             }
-            chainStr = chainStr.substring(0, chainStr.length()-2)+";\n";
+            chainStr.delete(chainStr.length()-2, chainStr.length()-1).append(";\n");
         }
         return chainStr.substring(0, chainStr.length()-1);
     }

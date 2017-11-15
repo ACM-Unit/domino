@@ -22,15 +22,15 @@ public class ShowServlet extends MainServlet {
         List<Domino> dominoes = dominoService.getRandom(num);
         context.getJdbcObj().printDbStatus();
         request.setAttribute("showDomino", dominoes);
-        String idString = "";
+        StringBuilder idString = new StringBuilder("");
         for(int i=0; i<dominoes.size(); i++){
             if(i==dominoes.size()-1){
-                idString +=dominoes.get(i).getId();
+                idString.append(dominoes.get(i).getId());
             }else{
-                idString+=dominoes.get(i).getId()+",";
+                idString.append(dominoes.get(i).getId()).append(",");
             }
         }
-        request.setAttribute("ids", idString);
+        request.setAttribute("ids", idString.toString());
         request.getRequestDispatcher("/pages/showDomino.jsp").forward(request,response);
     }
     @Override
@@ -42,15 +42,15 @@ public class ShowServlet extends MainServlet {
         List<Domino> dominoes = dominoService.getRandom(Integer.parseInt(request.getParameter("num")));
         context.getJdbcObj().printDbStatus();
         request.setAttribute("showDomino", dominoes);
-        String idString = "";
+        StringBuilder idString = new StringBuilder("");
         for(int i=0; i<dominoes.size(); i++){
             if(i==dominoes.size()-1){
-                idString +=dominoes.get(i).getId();
+                idString.append(dominoes.get(i).getId());
             }else{
-                idString+=dominoes.get(i).getId()+",";
+                idString.append(dominoes.get(i).getId()).append(",");
             }
         }
-        request.setAttribute("ids", idString);
+        request.setAttribute("ids", idString.toString());
         request.getRequestDispatcher("/pages/showDomino.jsp").forward(request,response);
     }
 }

@@ -70,12 +70,16 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
     }
 
     @Override
-    public boolean insertMarket(Market market) throws MySQLIntegrityConstraintViolationException, TimeoutException {
+    public boolean insertMarket(Market market, String label) throws MySQLIntegrityConstraintViolationException, TimeoutException {
         Chain chain = new Chain();
         Map<Integer, List<Domino>> map = new HashMap<>();
         chain.setMarket(market);
         List<List<Domino>> list = new ArrayList<>();
-        list.addAll(market.getAllChains());
+        if("All".equals(label)) {
+            list.addAll(market.getAllChains());
+        }else{
+            list.addAll(market.getLongestChains());
+        }
         for (int i = 0; i < list.size(); i++) {
             map.put(i, list.get(i));
         }

@@ -10,7 +10,6 @@ import java.util.List;
 public interface MarketService {
     List<String> getAllNames();
     Market getMarketByName(String name);
-    boolean saveMarketAndAllChains(Market market);
-    boolean saveMarketAndLongestChains(Market market);
+    boolean saveMarketAndChains(Market market, String label);
     void delete(String name);
 }
