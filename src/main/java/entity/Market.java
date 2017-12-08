@@ -55,16 +55,15 @@ public class Market implements Callable<String> {
      * Constructor which create set of Dominoes and find all possible chains builds from this set
      * @param market
      * @param name
-     * @throws CloneNotSupportedException
      */
     public Market(List<Domino> market, String name) {
         this.market = market;
         this.name = name;
     }
     @Override
-    public String call() throws Exception {
+    public String call() {
         for(int i=0; i<market.size(); i++) {
-            Domino domino = market.get(i).clone();
+            Domino domino = new Domino(market.get(i));
             List<Domino> next = new ArrayList<Domino>(market);
             next.remove(i);
             List<Domino> currentList = new ArrayList<Domino>();
@@ -83,15 +82,14 @@ public class Market implements Callable<String> {
      * Recursive method for find all possible chains builds from given set
      * @param list
      * @param currentList
-     * @throws CloneNotSupportedException
      */
-    private void getAllChains(List<Domino>list, List<Domino> currentList) throws CloneNotSupportedException {
+    private void getAllChains(List<Domino>list, List<Domino> currentList) {
         boolean stop = false;
         Domino current = currentList.get(currentList.size()-1);
         Iterator<Domino> iter = list.iterator();
         while(iter.hasNext()) {
             Domino dominoOrigin = iter.next();
-            Domino domino = dominoOrigin.clone();
+            Domino domino = new Domino(dominoOrigin);
             if(current.join(domino)){
                 List<Domino> next = new ArrayList<Domino>(list);
                 next.remove(dominoOrigin);

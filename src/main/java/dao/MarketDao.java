@@ -10,7 +10,7 @@ import java.util.concurrent.TimeoutException;
  * Class for work with sets of domino from Database
  * Created by Viacheslav Koshchii on 05.11.2017.
  */
-public interface MarketDao {
+public interface MarketDao extends Dao{
     /**
      * method for get all names of  sets of domino which save in database
      * @return

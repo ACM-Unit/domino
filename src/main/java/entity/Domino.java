@@ -23,6 +23,13 @@ public class Domino {
         this.secondNum = secondNum;
         this.isJoin = false;
     }
+    public Domino(Domino domino){
+        firstNum = domino.getFirstNum();
+        secondNum = domino.getSecondNum();
+        id = domino.getId();
+        isJoin = false;
+
+    }
 
     /**
      * method change first number an second
@@ -83,13 +90,6 @@ public class Domino {
     @Override
     public String toString() {
         return firstNum +  ":" + secondNum;
-    }
-
-    @Override
-    protected Domino clone() throws CloneNotSupportedException {
-        Domino domino = new Domino(firstNum, secondNum);
-        domino.setId(id);
-        return domino;
     }
 
     @Override

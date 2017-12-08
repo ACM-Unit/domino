@@ -2,12 +2,14 @@ package dao.impl;
 
 import dao.ChainDao;
 import dao.MarketDao;
-import dbConnection.DbConnection;
 import entity.Chain;
 import entity.Domino;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -18,7 +20,7 @@ import java.util.Map;
  *
  * Created by Viacheslav Koshchii on 11/6/2017.
  */
-public class ChainDaoImpl extends DbConnection implements ChainDao {
+public class ChainDaoImpl implements ChainDao {
     private Logger LOGGER = Logger.getLogger(getClass());
     private MarketDao dao;
     private DataSource dataSource;
@@ -31,6 +33,9 @@ public class ChainDaoImpl extends DbConnection implements ChainDao {
     public Chain getChainByName(String name) {
         Chain chain = new Chain();
         Map<Integer, List<Domino>> map = new LinkedHashMap<>();
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         try {
             connection = dataSource.getConnection();
             stmt = connection.prepareStatement("SELECT * FROM chain where marketname = ?");
@@ -55,10 +60,9 @@ public class ChainDaoImpl extends DbConnection implements ChainDao {
         } catch (SQLException ex) {
             LOGGER.error("SQL exception while getting chain by name");
         } finally {
-            close();
+            close(connection, stmt, rs, LOGGER);
         }
         return chain;
     }
-
 
 }

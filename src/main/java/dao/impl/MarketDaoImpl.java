@@ -2,24 +2,23 @@ package dao.impl;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 import dao.MarketDao;
-import dbConnection.DbConnection;
 import entity.Chain;
 import entity.Domino;
 import entity.Market;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Viacheslav Koshchii on 05.11.2017.
  */
-public class MarketDaoImpl extends DbConnection implements MarketDao {
+public class MarketDaoImpl implements MarketDao {
     private Logger LOGGER = Logger.getLogger(getClass());
     private DataSource dataSource;
     public MarketDaoImpl(DataSource dataSource) throws SQLException {
@@ -29,6 +28,9 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
     @Override
     public List<String> getAllMarketNames() {
         List<String> names = null;
+        Connection connection = null;PreparedStatement stmt = null;
+        ResultSet rs = null;
+
         try {
             connection = dataSource.getConnection();
             stmt = connection.prepareStatement("SELECT distinct name FROM market");
@@ -40,7 +42,7 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
         } catch (SQLException ex) {
             LOGGER.error("SQL exception while getting all markets");
         } finally {
-            close();
+            close(connection, stmt, rs, LOGGER);
         }
         return names;
     }
@@ -48,6 +50,9 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
     @Override
     public Market getMarketByName(String name) {
         Market market = null;
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         try {
             connection = dataSource.getConnection();
             stmt = connection.prepareStatement("SELECT * FROM domino d, market m where d.id = m.domino  and m.name = ?");
@@ -64,7 +69,7 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
         } catch (SQLException ex) {
             LOGGER.error("SQL exception while getting market by name");
         } finally {
-            close();
+            close(connection, stmt, rs, LOGGER);
         }
         return market;
     }
@@ -92,20 +97,30 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
                 idString.append(market.getMarket().get(i).getId()).append(",");
             }
         }
+        Connection connection = null;
+        PreparedStatement stmt = null;
         try {
             connection = dataSource.getConnection();
             connection.setAutoCommit(false);
             stmt = connection.prepareStatement("INSERT INTO `domino`.`market` SELECT '" + market.getName() + "', id FROM domino where id in (" + idString + ")");
             int i = stmt.executeUpdate();
             Map<Integer, List<Domino>> map1 = chain.getChains();
-            StringBuilder query = new StringBuilder("");
+            StringBuilder query = new StringBuilder("INSERT INTO `domino`.`chain` ");
+            List<String> listPlace = new ArrayList<>();
             for (int n : map.keySet()) {
                 List<Domino> list1 = map1.get(n);
                 for (Domino domino : list1) {
-                    query.append("select null, ").append(n).append(", '").append(chain.getMarket().getName()).append("', ").append(domino.getFirstNum()).append(", ").append(domino.getSecondNum()).append(" from dual union all ");
+                    query.append("select null, ?, ?, ?, ? from dual union all ");
+                    listPlace.add(String.valueOf(n));
+                    listPlace.add(chain.getMarket().getName());
+                    listPlace.add(String.valueOf(domino.getFirstNum()));
+                    listPlace.add(String.valueOf(domino.getSecondNum()));
                 }
             }
-            stmt = connection.prepareStatement("INSERT INTO `domino`.`chain` " + query.substring(0, query.length() - 11));
+            stmt = connection.prepareStatement(query.substring(0, query.length() - 11));
+            for (int j = 0; j < listPlace.size(); j++) {
+                stmt.setString(j+1, listPlace.get(j));
+            }
             stmt.executeUpdate();
             connection.commit();
             if (i == 1) {
@@ -126,13 +141,15 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
             }
             LOGGER.error("SQL exception while inserting market");
         } finally {
-            close();
+            close(connection, stmt, null, LOGGER);
         }
         return false;
     }
 
     @Override
     public boolean deleteMarket(String name) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
         try {
             connection = dataSource.getConnection();
             stmt = connection.prepareStatement("DELETE FROM market WHERE name = ?");
@@ -144,7 +161,7 @@ public class MarketDaoImpl extends DbConnection implements MarketDao {
         } catch (SQLException ex) {
             LOGGER.error("SQL exception while deleting market");
         } finally {
-            close();
+            close(connection, stmt, null, LOGGER);
         }
         return false;
     }

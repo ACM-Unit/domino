@@ -8,7 +8,7 @@ import java.util.List;
  * Class for work with Domino from Database
  * Created by Viacheslav Koshchii on 05.11.2017.
  */
-public interface DominoDao {
+public interface DominoDao extends Dao{
     /**
      * get all dominoes from database
      * @return

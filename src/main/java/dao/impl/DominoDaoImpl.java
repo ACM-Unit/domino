@@ -1,12 +1,13 @@
 package dao.impl;
 
 import dao.DominoDao;
-import dbConnection.DbConnection;
 import entity.Domino;
 import org.apache.log4j.Logger;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created by Viacheslav Koshchii on 05.11.2017.
  */
-public class DominoDaoImpl  extends DbConnection implements DominoDao {
+public class DominoDaoImpl implements DominoDao {
     private Logger LOGGER = Logger.getLogger(getClass());
     private DataSource dataSource;
     public DominoDaoImpl(DataSource dataSource) throws SQLException {
@@ -23,6 +24,9 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
 
     @Override
     public List<Domino> getAllDominoes() {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         try {
             connection = dataSource.getConnection();
             stmt = connection.prepareStatement("SELECT * FROM domino");
@@ -38,13 +42,16 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
         } catch (SQLException ex) {
             ex.printStackTrace();
         } finally {
-            close();
+            close(connection, stmt, rs, LOGGER);
         }
         return null;
     }
 
     @Override
     public List<Domino> getDominoesByIds(String idString) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
         try {
             connection = dataSource.getConnection();
             stmt = connection.prepareStatement("SELECT * FROM domino where id in ("+idString+")");
@@ -60,13 +67,14 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
         } catch (SQLException ex) {
             LOGGER.error("SQL exception while getting domino by id");
         } finally {
-            close();
+            close(connection, stmt, rs, LOGGER);
         }
         return null;
     }
 
     @Override
     public boolean insertDomino(Domino domino) {
+        Connection connection = null;
         try {
             connection = dataSource.getConnection();
             PreparedStatement ps = connection.prepareStatement("INSERT INTO domino VALUES (NULL, ?, ?)");
@@ -79,13 +87,15 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
         } catch (SQLException ex) {
             LOGGER.error("SQL exception while inserting domino");
         }finally {
-            close();
+            close(connection, null, null, LOGGER);
         }
         return false;
     }
 
     @Override
     public boolean updateDomino(Domino domino) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
         try {
             connection = dataSource.getConnection();
             stmt = connection.prepareStatement("UPDATE domino SET firstNum=?, secondNum=? WHERE id=?");
@@ -99,13 +109,15 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
         } catch (SQLException ex) {
             LOGGER.error("SQL exception while updating domino");
         }finally {
-            close();
+            close(connection, stmt, null, LOGGER);
         }
         return false;
     }
 
     @Override
     public boolean deleteDomino(Domino domino) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
         try {
             connection = dataSource.getConnection();
             stmt = connection.prepareStatement("DELETE FROM domino WHERE id=" + domino.getId());
@@ -116,7 +128,7 @@ public class DominoDaoImpl  extends DbConnection implements DominoDao {
         } catch (SQLException ex) {
             LOGGER.error("SQL exception while deleting domino");
         }finally {
-           close();
+           close(connection, stmt, null, LOGGER);
         }
         return false;
     }
